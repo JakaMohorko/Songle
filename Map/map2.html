@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#fancy {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+border-collapse: collapse;
+width: 100%;
+}
+
+#fancy td, #fancy th {
+border: 1px solid #ddd;
+padding: 8px;
+}
+
+#fancy tr:nth-child(even){background-color: #f2f2f2;}
+
+#fancy tr:hover {background-color: #ddd;}
+
+#fancy th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+</style>
+</head>
+<body>
+<table id="fancy">
+    <tr>
+        <th>Placemark</th>
+        <th>Line:Word (Lyric)</th>
+        <th>Classification</th>
+        <th>Style</th>
+        <th>Longitude</th>
+        <th>Latitude</th>
+    </tr>
+  <tr>
+    <td>1</td>
+    <td>48:10 (him)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1860373111277713</td><td>55.94309621527705</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>47:2 (come,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.188728215984586</td><td>55.94345547116601</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>61:7 (get)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1848832764569766</td><td>55.94331594047065</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>61:3 (get)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.191207010107449</td><td>55.943000623692484</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>50:2 (We)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1924548039967005</td><td>55.9446889749269</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>11:7 (really)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.185447526209844</td><td>55.94426357934746</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>59:1 (So)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1910250638122486</td><td>55.94305735769587</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>14:5 (his)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1913341000123814</td><td>55.9458343326105</td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td>32:6 (been)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.187701333286022</td><td>55.94566704058837</td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td>31:2 (don't)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1872637926412177</td><td>55.94561096141833</td>
+  </tr>
+  <tr>
+    <td>11</td>
+    <td>61:6 (gotta)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1872009586073715</td><td>55.94397824779988</td>
+  </tr>
+  <tr>
+    <td>12</td>
+    <td>22:4 (on)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1877821304652136</td><td>55.942976699155636</td>
+  </tr>
+  <tr>
+    <td>13</td>
+    <td>11:6 (doesn't)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1917118254619123</td><td>55.94385940639668</td>
+  </tr>
+  <tr>
+    <td>14</td>
+    <td>60:6 (to)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.185226746759854</td><td>55.94369286676622</td>
+  </tr>
+  <tr>
+    <td>15</td>
+    <td>49:8 ((Let)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.190187862262613</td><td>55.944988814578565</td>
+  </tr>
+  <tr>
+    <td>16</td>
+    <td>44:8 (poor)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.189030574834847</td><td>55.94469024904229</td>
+  </tr>
+  <tr>
+    <td>17</td>
+    <td>14:2 (a)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.188704843616561</td><td>55.944284611472675</td>
+  </tr>
+  <tr>
+    <td>18</td>
+    <td>36:2 (and)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.187420892285485</td><td>55.94466430396358</td>
+  </tr>
+  <tr>
+    <td>19</td>
+    <td>61:4 (out,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.190255614819514</td><td>55.94267113770225</td>
+  </tr>
+  <tr>
+    <td>20</td>
+    <td>60:3 (can't)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1902152852588035</td><td>55.94317739725365</td>
+  </tr>
+  <tr>
+    <td>21</td>
+    <td>58:9 (spit)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1856625510124634</td><td>55.946015934080634</td>
+  </tr>
+  <tr>
+    <td>22</td>
+    <td>8:2 (just)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.18638066593394</td><td>55.94268344649004</td>
+  </tr>
+  <tr>
+    <td>23</td>
+    <td>65:2 (really)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.19139968930995</td><td>55.94541350719722</td>
+  </tr>
+  <tr>
+    <td>24</td>
+    <td>51:4 (you)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1918556840972117</td><td>55.94536559666266</td>
+  </tr>
+  <tr>
+    <td>25</td>
+    <td>11:4 (wind)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1855336398746497</td><td>55.945182718046496</td>
+  </tr>
+  <tr>
+    <td>26</td>
+    <td>7:7 (see,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.191507257630553</td><td>55.94421596161865</td>
+  </tr>
+  <tr>
+    <td>27</td>
+    <td>39:2 (Galileo,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.189632132548283</td><td>55.94283713586696</td>
+  </tr>
+  <tr>
+    <td>28</td>
+    <td>22:6 (if)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1853967301241144</td><td>55.94521320881842</td>
+  </tr>
+  <tr>
+    <td>29</td>
+    <td>35:2 (Scaramouche,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1871400996485044</td><td>55.94308115946669</td>
+  </tr>
+  <tr>
+    <td>30</td>
+    <td>2:3 (just)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1870352901321075</td><td>55.944455606491175</td>
+  </tr>
+  <tr>
+    <td>31</td>
+    <td>54:1 (No,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.184448409778754</td><td>55.94321067192968</td>
+  </tr>
+  <tr>
+    <td>32</td>
+    <td>48:11 (go!))</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.190594202792356</td><td>55.94380573917327</td>
+  </tr>
+  <tr>
+    <td>33</td>
+    <td>24:1 (Too)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1905769576507845</td><td>55.945486250005175</td>
+  </tr>
+  <tr>
+    <td>34</td>
+    <td>27:5 (to)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.186129660166317</td><td>55.94338588097137</td>
+  </tr>
+  <tr>
+    <td>35</td>
+    <td>37:2 (very)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.185466156047869</td><td>55.944101892642145</td>
+  </tr>
+  <tr>
+    <td>36</td>
+    <td>58:11 (my)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.185123776819992</td><td>55.94298423103314</td>
+  </tr>
+  <tr>
+    <td>37</td>
+    <td>2:1 (Is)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1888870533331968</td><td>55.94316969133443</td>
+  </tr>
+  <tr>
+    <td>38</td>
+    <td>58:12 (eye?)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1886958794218567</td><td>55.942934262408556</td>
+  </tr>
+  <tr>
+    <td>39</td>
+    <td>44:7 (a)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1849680417511905</td><td>55.94454022282777</td>
+  </tr>
+  <tr>
+    <td>40</td>
+    <td>11:10 (me,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1843510402887465</td><td>55.946094270275005</td>
+  </tr>
+  <tr>
+    <td>41</td>
+    <td>22:2 (on,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1909650434554577</td><td>55.945406600130525</td>
+  </tr>
+  <tr>
+    <td>42</td>
+    <td>21:4 (back)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.185384404724502</td><td>55.944416705622835</td>
+  </tr>
+  <tr>
+    <td>43</td>
+    <td>43:4 (poor)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1871503779842425</td><td>55.94484280429987</td>
+  </tr>
+  <tr>
+    <td>44</td>
+    <td>16:2 (life)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1856884148210938</td><td>55.94386893140261</td>
+  </tr>
+  <tr>
+    <td>45</td>
+    <td>67:2 (really)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.191877309277587</td><td>55.945276179481596</td>
+  </tr>
+  <tr>
+    <td>46</td>
+    <td>47:5 (will)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1865572316980635</td><td>55.943904961270505</td>
+  </tr>
+  <tr>
+    <td>47</td>
+    <td>70:4 (wind)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1844892476022255</td><td>55.945422071359594</td>
+  </tr>
+  <tr>
+    <td>48</td>
+    <td>21:3 (not)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1873498446285207</td><td>55.94402210249388</td>
+  </tr>
+  <tr>
+    <td>49</td>
+    <td>68:3 (matters)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1882151936121716</td><td>55.94397293683269</td>
+  </tr>
+  <tr>
+    <td>50</td>
+    <td>59:6 (love)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1909844980725017</td><td>55.943253652947234</td>
+  </tr>
+  <tr>
+    <td>51</td>
+    <td>13:1 (Mama,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1861107727126803</td><td>55.94603485790091</td>
+  </tr>
+  <tr>
+    <td>52</td>
+    <td>1:5 (life?)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.192086856560229</td><td>55.943522328457064</td>
+  </tr>
+  <tr>
+    <td>53</td>
+    <td>48:7 (you)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.192176267732928</td><td>55.94532752161794</td>
+  </tr>
+  <tr>
+    <td>54</td>
+    <td>70:1 (Any)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.186065315466248</td><td>55.945151630831404</td>
+  </tr>
+  <tr>
+    <td>55</td>
+    <td>2:2 (this)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1899410474230026</td><td>55.94319728424976</td>
+  </tr>
+  <tr>
+    <td>56</td>
+    <td>49:6 (you)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1889454384057494</td><td>55.94594829968748</td>
+  </tr>
+  <tr>
+    <td>57</td>
+    <td>55:9 (me)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1897082943813095</td><td>55.943745696502596</td>
+  </tr>
+  <tr>
+    <td>58</td>
+    <td>24:6 (come,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1881368299901403</td><td>55.942999640668155</td>
+  </tr>
+  <tr>
+    <td>59</td>
+    <td>60:2 (baby,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.188036395759796</td><td>55.94326115484743</td>
+  </tr>
+  <tr>
+    <td>60</td>
+    <td>4:4 (reality.)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1848377169925945</td><td>55.943810882933874</td>
+  </tr>
+  <tr>
+    <td>61</td>
+    <td>43:2 (just)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.189772200799476</td><td>55.9439377343891</td>
+  </tr>
+  <tr>
+    <td>62</td>
+    <td>17:3 (I've)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.186367842062221</td><td>55.94340718658151</td>
+  </tr>
+  <tr>
+    <td>63</td>
+    <td>70:3 (the)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.18971619514688</td><td>55.944517180566244</td>
+  </tr>
+  <tr>
+    <td>64</td>
+    <td>48:9 ((Let)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.188690613967282</td><td>55.9436112978283</td>
+  </tr>
+  <tr>
+    <td>65</td>
+    <td>45:4 (life)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1866180997385785</td><td>55.94446817901701</td>
+  </tr>
+  <tr>
+    <td>66</td>
+    <td>26:4 (the)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1878100277266195</td><td>55.94563927239969</td>
+  </tr>
+  <tr>
+    <td>67</td>
+    <td>11:1 (Any)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.185099877940403</td><td>55.94316845597815</td>
+  </tr>
+  <tr>
+    <td>68</td>
+    <td>53:4 (go,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.191948943477188</td><td>55.94395297261735</td>
+  </tr>
+  <tr>
+    <td>69</td>
+    <td>53:1 (Never)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1888352030885376</td><td>55.946027223213086</td>
+  </tr>
+  <tr>
+    <td>70</td>
+    <td>53:2 (let)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1848455212164763</td><td>55.94302647088888</td>
+  </tr>
+  <tr>
+    <td>71</td>
+    <td>43:7 (loves)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1891485106115085</td><td>55.944167020011385</td>
+  </tr>
+  <tr>
+    <td>72</td>
+    <td>56:5 (put)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.191760687668845</td><td>55.943411908627745</td>
+  </tr>
+  <tr>
+    <td>73</td>
+    <td>38:2 (Galileo.)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1856595093151348</td><td>55.9435680470514</td>
+  </tr>
+  <tr>
+    <td>74</td>
+    <td>45:1 (Spare)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1893036362552105</td><td>55.94286951748587</td>
+  </tr>
+  <tr>
+    <td>75</td>
+    <td>6:2 (your)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.186184263070606</td><td>55.94424987921323</td>
+  </tr>
+  <tr>
+    <td>76</td>
+    <td>59:7 (me)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.186841614928219</td><td>55.94445863038033</td>
+  </tr>
+  <tr>
+    <td>77</td>
+    <td>50:5 (let)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.191991246666841</td><td>55.9461664545796</td>
+  </tr>
+  <tr>
+    <td>78</td>
+    <td>40:1 (Galileo)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.191960638697711</td><td>55.94563066703797</td>
+  </tr>
+  <tr>
+    <td>79</td>
+    <td>44:2 (just)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1869490530449847</td><td>55.942747623135666</td>
+  </tr>
+  <tr>
+    <td>80</td>
+    <td>25:4 (my)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1889117265648115</td><td>55.945781625441725</td>
+  </tr>
+  <tr>
+    <td>81</td>
+    <td>3:4 (landslide,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.18956956988526</td><td>55.94470172833118</td>
+  </tr>
+  <tr>
+    <td>82</td>
+    <td>56:10 (me,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1850948645884842</td><td>55.94561529593803</td>
+  </tr>
+  <tr>
+    <td>83</td>
+    <td>45:6 (this)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.188996581443027</td><td>55.945996612965175</td>
+  </tr>
+  <tr>
+    <td>84</td>
+    <td>8:6 (I)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1891038626752217</td><td>55.94289705138218</td>
+  </tr>
+  <tr>
+    <td>85</td>
+    <td>8:9 (sympathy,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1911753503153277</td><td>55.943239238184184</td>
+  </tr>
+  <tr>
+    <td>86</td>
+    <td>44:1 (He's)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1857266756122895</td><td>55.942655648412</td>
+  </tr>
+  <tr>
+    <td>87</td>
+    <td>28:5 (behind)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1917936161687788</td><td>55.945033499493725</td>
+  </tr>
+  <tr>
+    <td>88</td>
+    <td>34:7 (a)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.191850202886081</td><td>55.94490668352489</td>
+  </tr>
+  <tr>
+    <td>89</td>
+    <td>68:5 (me.)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.191156021375624</td><td>55.94475683508378</td>
+  </tr>
+  <tr>
+    <td>90</td>
+    <td>28:6 (and)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1867040284202512</td><td>55.94308690618525</td>
+  </tr>
+  <tr>
+    <td>91</td>
+    <td>55:3 (mia,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1871640063005615</td><td>55.943673914137534</td>
+  </tr>
+  <tr>
+    <td>92</td>
+    <td>55:5 (mia)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.186440239791218</td><td>55.94320322613684</td>
+  </tr>
+  <tr>
+    <td>93</td>
+    <td>37:1 (Very,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1888760447227424</td><td>55.94508143369375</td>
+  </tr>
+  <tr>
+    <td>94</td>
+    <td>49:4 (not)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1856681831171123</td><td>55.94381453099446</td>
+  </tr>
+  <tr>
+    <td>95</td>
+    <td>7:3 (to)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.192428235554887</td><td>55.945368547714516</td>
+  </tr>
+  <tr>
+    <td>96</td>
+    <td>4:2 (escape)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1849210600920186</td><td>55.944094173214616</td>
+  </tr>
+  <tr>
+    <td>97</td>
+    <td>41:1 (Magnifico-o-o-o-o.)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1906482803527094</td><td>55.94388112565908</td>
+  </tr>
+  <tr>
+    <td>98</td>
+    <td>21:2 (I'm)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.188169588298123</td><td>55.94574801768145</td>
+  </tr>
+  <tr>
+    <td>99</td>
+    <td>7:6 (and)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.186594301880895</td><td>55.9449889466431</td>
+  </tr>
+  <tr>
+    <td>100</td>
+    <td>63:3 (yeah,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.189403242567145</td><td>55.94535570874188</td>
+  </tr>
+  <tr>
+    <td>101</td>
+    <td>21:6 (this)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1922604400175594</td><td>55.94416597813594</td>
+  </tr>
+  <tr>
+    <td>102</td>
+    <td>34:5 (silhouetto)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.190588596019846</td><td>55.944083232966086</td>
+  </tr>
+  <tr>
+    <td>103</td>
+    <td>34:4 (little)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1923210057439757</td><td>55.94335410618852</td>
+  </tr>
+  <tr>
+    <td>104</td>
+    <td>54:6 (no,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1863272076667886</td><td>55.944443642464655</td>
+  </tr>
+  <tr>
+    <td>105</td>
+    <td>9:1 (Because)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.184824405337491</td><td>55.945920484888994</td>
+  </tr>
+  <tr>
+    <td>106</td>
+    <td>22:7 (nothing)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.188045274630258</td><td>55.944369830229185</td>
+  </tr>
+  <tr>
+    <td>107</td>
+    <td>8:5 (boy,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.191906829322861</td><td>55.94352910127717</td>
+  </tr>
+  <tr>
+    <td>108</td>
+    <td>59:12 (die?)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.187645193952426</td><td>55.94364280229014</td>
+  </tr>
+  <tr>
+    <td>109</td>
+    <td>49:3 (will)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1864088777603263</td><td>55.94365426636871</td>
+  </tr>
+  <tr>
+    <td>110</td>
+    <td>16:4 (just)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.186898930349674</td><td>55.944437390203966</td>
+  </tr>
+  <tr>
+    <td>111</td>
+    <td>35:7 (Fandango?)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1863217702482696</td><td>55.9460396303187</td>
+  </tr>
+  <tr>
+    <td>112</td>
+    <td>59:2 (you)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1903672253416167</td><td>55.94529320975566</td>
+  </tr>
+  <tr>
+    <td>113</td>
+    <td>8:4 (poor)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1921223143788873</td><td>55.94458460535199</td>
+  </tr>
+  <tr>
+    <td>114</td>
+    <td>58:8 (and)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.191109343979423</td><td>55.94405456123255</td>
+  </tr>
+  <tr>
+    <td>115</td>
+    <td>58:2 (you)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1899891999386885</td><td>55.945760440708206</td>
+  </tr>
+  <tr>
+    <td>116</td>
+    <td>34:1 (I)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1849353450126756</td><td>55.94604309935789</td>
+  </tr>
+  <tr>
+    <td>117</td>
+    <td>55:2 (mama)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.192336405273299</td><td>55.943850683981644</td>
+  </tr>
+  <tr>
+    <td>118</td>
+    <td>47:1 (Easy)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1922867375636743</td><td>55.94339410155987</td>
+  </tr>
+  <tr>
+    <td>119</td>
+    <td>27:2 (everybody,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.184770976225702</td><td>55.94268377390211</td>
+  </tr>
+  <tr>
+    <td>120</td>
+    <td>17:6 (thrown)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.184926153615004</td><td>55.9449341673607</td>
+  </tr>
+  <tr>
+    <td>121</td>
+    <td>25:2 (shivers)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1878860867018766</td><td>55.9448199822671</td>
+  </tr>
+  <tr>
+    <td>122</td>
+    <td>67:1 (Nothing)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1898285286999783</td><td>55.94492149531698</td>
+  </tr>
+  <tr>
+    <td>123</td>
+    <td>36:3 (lightning,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1865057653617828</td><td>55.94528999072672</td>
+  </tr>
+  <tr>
+    <td>124</td>
+    <td>56:11 (for)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.184713892209659</td><td>55.943778975150124</td>
+  </tr>
+  <tr>
+    <td>125</td>
+    <td>50:7 (go.)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1875819973815456</td><td>55.94269693489223</td>
+  </tr>
+  <tr>
+    <td>126</td>
+    <td>27:3 (I've)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.184640245055882</td><td>55.94541393190343</td>
+  </tr>
+  <tr>
+    <td>127</td>
+    <td>49:1 (Bismillah!)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.186892623188857</td><td>55.945615085535785</td>
+  </tr>
+  <tr>
+    <td>128</td>
+    <td>45:5 (from)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.188896020605272</td><td>55.94264069148033</td>
+  </tr>
+  <tr>
+    <td>129</td>
+    <td>50:6 (you)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1920576259442264</td><td>55.943373636879905</td>
+  </tr>
+  <tr>
+    <td>130</td>
+    <td>21:8 (tomorrow,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.188372608981606</td><td>55.945390561307384</td>
+  </tr>
+  <tr>
+    <td>131</td>
+    <td>13:4 (a)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.185686681457261</td><td>55.945386579644705</td>
+  </tr>
+  <tr>
+    <td>132</td>
+    <td>10:2 (high,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1891156041590305</td><td>55.94326328533994</td>
+  </tr>
+  <tr>
+    <td>133</td>
+    <td>8:8 (no)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1853575886837584</td><td>55.943411248169895</td>
+  </tr>
+  <tr>
+    <td>134</td>
+    <td>28:2 (leave)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1878535109770962</td><td>55.94296877883635</td>
+  </tr>
+  <tr>
+    <td>135</td>
+    <td>55:10 (go.))</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1888574656963846</td><td>55.94364244889157</td>
+  </tr>
+  <tr>
+    <td>136</td>
+    <td>50:4 (not)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1890083740359234</td><td>55.943829573801445</td>
+  </tr>
+  <tr>
+    <td>137</td>
+    <td>31:4 (die,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1886516479389657</td><td>55.946171510509686</td>
+  </tr>
+  <tr>
+    <td>138</td>
+    <td>70:2 (way)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1915078479082166</td><td>55.942943760243104</td>
+  </tr>
+  <tr>
+    <td>139</td>
+    <td>26:5 (time.)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.184834376590424</td><td>55.943902347764464</td>
+  </tr>
+  <tr>
+    <td>140</td>
+    <td>53:3 (me)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.189749851167279</td><td>55.943187605306456</td>
+  </tr>
+  <tr>
+    <td>141</td>
+    <td>66:2 (can)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1851432210001023</td><td>55.94458642440388</td>
+  </tr>
+  <tr>
+    <td>142</td>
+    <td>32:7 (born)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1859326200289035</td><td>55.94324616982232</td>
+  </tr>
+  <tr>
+    <td>143</td>
+    <td>32:2 (sometimes)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.189762031904985</td><td>55.94384710760595</td>
+  </tr>
+  <tr>
+    <td>144</td>
+    <td>21:1 (If)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.186685763968159</td><td>55.94321858115752</td>
+  </tr>
+  <tr>
+    <td>145</td>
+    <td>47:7 (let)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1866371321577254</td><td>55.94351482003933</td>
+  </tr>
+  <tr>
+    <td>146</td>
+    <td>1:2 (this)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1903907384609727</td><td>55.94603476973323</td>
+  </tr>
+  <tr>
+    <td>147</td>
+    <td>22:9 (matters.)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1867376504113767</td><td>55.94352245828617</td>
+  </tr>
+  <tr>
+    <td>148</td>
+    <td>47:6 (you)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.19203528926002</td><td>55.9444716179203</td>
+  </tr>
+  <tr>
+    <td>149</td>
+    <td>35:5 (do)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1871752538129545</td><td>55.944154819847455</td>
+  </tr>
+  <tr>
+    <td>150</td>
+    <td>55:4 (mama)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1855824564318946</td><td>55.94320056607874</td>
+  </tr>
+  <tr>
+    <td>151</td>
+    <td>7:2 (up)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1879374578043373</td><td>55.94287520271965</td>
+  </tr>
+  <tr>
+    <td>152</td>
+    <td>10:1 (Little)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1871740731642086</td><td>55.94343942573429</td>
+  </tr>
+  <tr>
+    <td>153</td>
+    <td>60:1 (Oh,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.187459952542387</td><td>55.943756321259414</td>
+  </tr>
+  <tr>
+    <td>154</td>
+    <td>28:1 (Gotta)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1887232402014414</td><td>55.94348457443623</td>
+  </tr>
+  <tr>
+    <td>155</td>
+    <td>52:2 (never)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1868337361481403</td><td>55.94352084812068</td>
+  </tr>
+  <tr>
+    <td>156</td>
+    <td>60:7 (me,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1905440680114814</td><td>55.944282092288375</td>
+  </tr>
+  <tr>
+    <td>157</td>
+    <td>68:4 (to)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.188807704173027</td><td>55.94317400488401</td>
+  </tr>
+  <tr>
+    <td>158</td>
+    <td>50:8 ((Let)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1862627121378146</td><td>55.944883431573025</td>
+  </tr>
+  <tr>
+    <td>159</td>
+    <td>51:2 (not)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.190308467058765</td><td>55.945668060725396</td>
+  </tr>
+  <tr>
+    <td>160</td>
+    <td>2:4 (fantasy?)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1885100659158874</td><td>55.94517687283751</td>
+  </tr>
+  <tr>
+    <td>161</td>
+    <td>60:5 (this)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1913062872924733</td><td>55.94521869322128</td>
+  </tr>
+  <tr>
+    <td>162</td>
+    <td>3:2 (in)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.187707402843804</td><td>55.945699891207575</td>
+  </tr>
+  <tr>
+    <td>163</td>
+    <td>22:5 (as)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.190880828982287</td><td>55.94569623779091</td>
+  </tr>
+  <tr>
+    <td>164</td>
+    <td>47:9 (go?)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.188863189090204</td><td>55.94279150760823</td>
+  </tr>
+  <tr>
+    <td>165</td>
+    <td>37:3 (frightening)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1847072897366013</td><td>55.94328562044918</td>
+  </tr>
+  <tr>
+    <td>166</td>
+    <td>59:3 (think)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.189629377858341</td><td>55.94358299701076</td>
+  </tr>
+  <tr>
+    <td>167</td>
+    <td>20:2 (mean)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1912800460879875</td><td>55.94373726391164</td>
+  </tr>
+  <tr>
+    <td>168</td>
+    <td>60:8 (baby,)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1846353199556168</td><td>55.94317490680223</td>
+  </tr>
+  <tr>
+    <td>169</td>
+    <td>47:3 (easy)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1848110736933277</td><td>55.9444802544873</td>
+  </tr>
+  <tr>
+    <td>170</td>
+    <td>8:3 (a)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1871440533496647</td><td>55.94348012710415</td>
+  </tr>
+  <tr>
+    <td>171</td>
+    <td>8:1 (I'm)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.1915284275032882</td><td>55.944277980015315</td>
+  </tr>
+  <tr>
+    <td>172</td>
+    <td>47:8 (me)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1898286740540365</td><td>55.94552050840496</td>
+  </tr>
+  <tr>
+    <td>173</td>
+    <td>32:1 (I)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.186597941429511</td><td>55.942902079022055</td>
+  </tr>
+  <tr>
+    <td>174</td>
+    <td>11:9 (to)</td>
+    <td>boring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png" width="32" height="32"></td>
+      <td>-3.1871678289812486</td><td>55.943768800421445</td>
+  </tr>
+  <tr>
+    <td>175</td>
+    <td>51:1 (Will)</td>
+    <td>notboring</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png" width="32" height="32"></td>
+      <td>-3.189261153932826</td><td>55.94353893138871</td>
+  </tr>
+</table></body></html>

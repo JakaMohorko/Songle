@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#fancy {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+border-collapse: collapse;
+width: 100%;
+}
+
+#fancy td, #fancy th {
+border: 1px solid #ddd;
+padding: 8px;
+}
+
+#fancy tr:nth-child(even){background-color: #f2f2f2;}
+
+#fancy tr:hover {background-color: #ddd;}
+
+#fancy th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+</style>
+</head>
+<body>
+<table id="fancy">
+    <tr>
+        <th>Placemark</th>
+        <th>Line:Word (Lyric)</th>
+        <th>Classification</th>
+        <th>Style</th>
+        <th>Longitude</th>
+        <th>Latitude</th>
+    </tr>
+  <tr>
+    <td>1</td>
+    <td>55:1 (Oh,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1869307741115662</td><td>55.94481695607683</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>51:4 (you)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1885226965749776</td><td>55.94482456601353</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>21:7 (time)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.186669178092598</td><td>55.94444913310533</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>50:4 (not)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1874999403193094</td><td>55.94571668647767</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>1:2 (this)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.189825070523909</td><td>55.94391668532715</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>59:9 (leave)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.187187260225937</td><td>55.94573429161991</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>30:2 (ooh)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.188807149746576</td><td>55.94417006114126</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>34:7 (a)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.185103876507775</td><td>55.94613465373285</td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td>11:9 (to)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1874897837202845</td><td>55.94396512441551</td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td>35:2 (Scaramouche,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1856599224745814</td><td>55.94270279892545</td>
+  </tr>
+  <tr>
+    <td>11</td>
+    <td>15:2 (my)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1908871748006895</td><td>55.94401210140577</td>
+  </tr>
+  <tr>
+    <td>12</td>
+    <td>22:1 (Carry)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.191116855341561</td><td>55.9442291690531</td>
+  </tr>
+  <tr>
+    <td>13</td>
+    <td>55:7 (mia,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1893688197156913</td><td>55.94475708966015</td>
+  </tr>
+  <tr>
+    <td>14</td>
+    <td>67:1 (Nothing)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1917985065734995</td><td>55.944562205738706</td>
+  </tr>
+  <tr>
+    <td>15</td>
+    <td>45:6 (this)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.18905518613561</td><td>55.944755855610026</td>
+  </tr>
+  <tr>
+    <td>16</td>
+    <td>27:3 (I've)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.18877456837294</td><td>55.94504109525317</td>
+  </tr>
+  <tr>
+    <td>17</td>
+    <td>45:4 (life)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1858537017642288</td><td>55.94525245192859</td>
+  </tr>
+  <tr>
+    <td>18</td>
+    <td>27:6 (go,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.189740311635996</td><td>55.94361049644465</td>
+  </tr>
+  <tr>
+    <td>19</td>
+    <td>8:6 (I)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.186230285249606</td><td>55.9437487913566</td>
+  </tr>
+  <tr>
+    <td>20</td>
+    <td>48:7 (you)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.188769840090384</td><td>55.94591750325367</td>
+  </tr>
+  <tr>
+    <td>21</td>
+    <td>35:4 (you)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.191891442993622</td><td>55.94286354848715</td>
+  </tr>
+  <tr>
+    <td>22</td>
+    <td>63:3 (yeah,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1878844625314344</td><td>55.94525201566233</td>
+  </tr>
+  <tr>
+    <td>23</td>
+    <td>50:5 (let)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1850344000135116</td><td>55.943490577571204</td>
+  </tr>
+  <tr>
+    <td>24</td>
+    <td>28:7 (face)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.187515862502797</td><td>55.94375942190045</td>
+  </tr>
+  <tr>
+    <td>25</td>
+    <td>54:3 (no,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1891372827587956</td><td>55.94607416560725</td>
+  </tr>
+  <tr>
+    <td>26</td>
+    <td>34:8 (man,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.186816117267603</td><td>55.9446636265689</td>
+  </tr>
+  <tr>
+    <td>27</td>
+    <td>28:3 (you)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.192398084063591</td><td>55.943850611691154</td>
+  </tr>
+  <tr>
+    <td>28</td>
+    <td>48:2 (No,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1854827168124915</td><td>55.942893410688725</td>
+  </tr>
+  <tr>
+    <td>29</td>
+    <td>60:4 (do)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.187408013737283</td><td>55.94283547969892</td>
+  </tr>
+  <tr>
+    <td>30</td>
+    <td>8:4 (poor)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.188294207776208</td><td>55.94267356941682</td>
+  </tr>
+  <tr>
+    <td>31</td>
+    <td>30:7 (blows),)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.18782721494843</td><td>55.9456170055639</td>
+  </tr>
+  <tr>
+    <td>32</td>
+    <td>30:4 (way)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1886110940472916</td><td>55.94480653530339</td>
+  </tr>
+  <tr>
+    <td>33</td>
+    <td>22:3 (carry)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.190311910619552</td><td>55.9436069560896</td>
+  </tr>
+  <tr>
+    <td>34</td>
+    <td>38:1 ((Galileo))</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1912563504711855</td><td>55.943409127168955</td>
+  </tr>
+  <tr>
+    <td>35</td>
+    <td>56:7 (for)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.184847250480333</td><td>55.94472682396092</td>
+  </tr>
+  <tr>
+    <td>36</td>
+    <td>8:8 (no)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.185871628317892</td><td>55.942861826759156</td>
+  </tr>
+  <tr>
+    <td>37</td>
+    <td>55:3 (mia,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1864560396550985</td><td>55.944445437911206</td>
+  </tr>
+  <tr>
+    <td>38</td>
+    <td>63:5 (yeah))</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1897034445044308</td><td>55.9429533684282</td>
+  </tr>
+  <tr>
+    <td>39</td>
+    <td>41:1 (Magnifico-o-o-o-o.)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.185114425134018</td><td>55.943754670538574</td>
+  </tr>
+  <tr>
+    <td>40</td>
+    <td>11:6 (doesn't)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.18948608333086</td><td>55.94612447282848</td>
+  </tr>
+  <tr>
+    <td>41</td>
+    <td>11:2 (way)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1887004116575923</td><td>55.944987623438664</td>
+  </tr>
+  <tr>
+    <td>42</td>
+    <td>44:1 (He's)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.187408711242392</td><td>55.94283966838679</td>
+  </tr>
+  <tr>
+    <td>43</td>
+    <td>37:1 (Very,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.184555192790989</td><td>55.94569462365442</td>
+  </tr>
+  <tr>
+    <td>44</td>
+    <td>51:7 (me)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1919283891876478</td><td>55.94448688151412</td>
+  </tr>
+  <tr>
+    <td>45</td>
+    <td>14:5 (his)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.18843335209067</td><td>55.944608010121115</td>
+  </tr>
+  <tr>
+    <td>46</td>
+    <td>39:2 (Galileo,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.191201211134933</td><td>55.94408489549409</td>
+  </tr>
+  <tr>
+    <td>47</td>
+    <td>55:10 (go.))</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1897677588328905</td><td>55.94331734446388</td>
+  </tr>
+  <tr>
+    <td>48</td>
+    <td>51:8 (go!))</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1892606557793326</td><td>55.943781318466385</td>
+  </tr>
+  <tr>
+    <td>49</td>
+    <td>59:12 (die?)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.185907786743285</td><td>55.94472465805409</td>
+  </tr>
+  <tr>
+    <td>50</td>
+    <td>35:3 (will)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1878100940357865</td><td>55.94265126494643</td>
+  </tr>
+  <tr>
+    <td>51</td>
+    <td>45:7 (monstrosity.)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1847048014644153</td><td>55.943805418754216</td>
+  </tr>
+  <tr>
+    <td>52</td>
+    <td>21:1 (If)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1893760512724585</td><td>55.94569463034291</td>
+  </tr>
+  <tr>
+    <td>53</td>
+    <td>11:7 (really)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1911118561344534</td><td>55.9446416547813</td>
+  </tr>
+  <tr>
+    <td>54</td>
+    <td>49:7 (go.)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.189984277497575</td><td>55.94612728568721</td>
+  </tr>
+  <tr>
+    <td>55</td>
+    <td>4:4 (reality.)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1888005476795156</td><td>55.94306240934491</td>
+  </tr>
+  <tr>
+    <td>56</td>
+    <td>43:3 (a)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.185131569638941</td><td>55.946113027146154</td>
+  </tr>
+  <tr>
+    <td>57</td>
+    <td>21:4 (back)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.186912943067385</td><td>55.945674032934704</td>
+  </tr>
+  <tr>
+    <td>58</td>
+    <td>49:10 (go!))</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1906940927083247</td><td>55.94421472261792</td>
+  </tr>
+  <tr>
+    <td>59</td>
+    <td>43:5 (boy,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1910545560209065</td><td>55.94427602258377</td>
+  </tr>
+  <tr>
+    <td>60</td>
+    <td>20:4 (make)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.189138348525384</td><td>55.94418169961343</td>
+  </tr>
+  <tr>
+    <td>61</td>
+    <td>9:1 (Because)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.189609793688234</td><td>55.94352647608667</td>
+  </tr>
+  <tr>
+    <td>62</td>
+    <td>10:1 (Little)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.189482741779467</td><td>55.94564428626619</td>
+  </tr>
+  <tr>
+    <td>63</td>
+    <td>21:3 (not)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1911436055648146</td><td>55.94336398581892</td>
+  </tr>
+  <tr>
+    <td>64</td>
+    <td>36:2 (and)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.185208121773638</td><td>55.944333790228214</td>
+  </tr>
+  <tr>
+    <td>65</td>
+    <td>50:8 ((Let)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.18893025205708</td><td>55.943533154659804</td>
+  </tr>
+  <tr>
+    <td>66</td>
+    <td>67:3 (matters,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1855702795123224</td><td>55.943531255269754</td>
+  </tr>
+  <tr>
+    <td>67</td>
+    <td>61:4 (out,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.188482674721149</td><td>55.944847836448474</td>
+  </tr>
+  <tr>
+    <td>68</td>
+    <td>7:6 (and)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.186764926659653</td><td>55.94512789058467</td>
+  </tr>
+  <tr>
+    <td>69</td>
+    <td>68:2 (really)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1847355509775004</td><td>55.944543450647714</td>
+  </tr>
+  <tr>
+    <td>70</td>
+    <td>25:2 (shivers)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1844015439031796</td><td>55.94374439593647</td>
+  </tr>
+  <tr>
+    <td>71</td>
+    <td>1:5 (life?)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1884767332798356</td><td>55.94322110413157</td>
+  </tr>
+  <tr>
+    <td>72</td>
+    <td>21:6 (this)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1913869343440475</td><td>55.944396400177304</td>
+  </tr>
+  <tr>
+    <td>73</td>
+    <td>24:4 (time)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1855422707538197</td><td>55.94268211206872</td>
+  </tr>
+  <tr>
+    <td>74</td>
+    <td>10:2 (high,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.189481857004818</td><td>55.94470171298357</td>
+  </tr>
+  <tr>
+    <td>75</td>
+    <td>16:3 (had)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1875172628798887</td><td>55.94414514066531</td>
+  </tr>
+  <tr>
+    <td>76</td>
+    <td>52:5 (go)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1888379190971925</td><td>55.94568194727527</td>
+  </tr>
+  <tr>
+    <td>77</td>
+    <td>16:1 (Mama,)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1914606474883374</td><td>55.94267397384104</td>
+  </tr>
+  <tr>
+    <td>78</td>
+    <td>59:4 (you)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.190065533652383</td><td>55.945000889430816</td>
+  </tr>
+  <tr>
+    <td>79</td>
+    <td>32:4 (I'd)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1871490441895878</td><td>55.94290382022087</td>
+  </tr>
+  <tr>
+    <td>80</td>
+    <td>56:1 (Beelzebub)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.1915574202944623</td><td>55.943631892989316</td>
+  </tr>
+  <tr>
+    <td>81</td>
+    <td>17:5 (and)</td>
+    <td>unclassified</td>
+    <td><img src="http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" width="32" height="32"></td>
+      <td>-3.186439542156783</td><td>55.94486283928077</td>
+  </tr>
+</table></body></html>
