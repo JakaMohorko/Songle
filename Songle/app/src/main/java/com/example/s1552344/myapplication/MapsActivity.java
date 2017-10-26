@@ -20,7 +20,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
+import com.google.maps.android.data.kml.KmlPlacemark;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.BinaryHttpResponseHandler;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
@@ -32,8 +34,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import         com.google.android.gms.maps.model.Marker;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -46,7 +52,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLastLocation;
     private static final String TAG = "MapsActivity";
     private InputStream kmlMap;
-
+    private String mapParse = "";
+    private String songLyrics = "";
+    private Song selectedSong;
+    private KmlLayer layer;
+    private ArrayList<double[]> placemarkCoordinates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,34 +78,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         Intent intent = getIntent();
-        AsyncHttpClient client = new AsyncHttpClient();
-        String url = "http://www.inf.ed.ac.uk/teaching/courses/selp/data/songs/" + ((Song) (intent.getSerializableExtra("song"))).getNumber() + "/map1.kml";
-        Log.d(TAG, url);
-        //File tempFile = ;
-        client.get(url, new
-
-                FileAsyncHttpResponseHandler() {
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, File file) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, File file) {
-
-                    }
-                }
-        );
-
+        try {
+            mapParse = (String)intent.getSerializableExtra("kmlMap");
+            kmlMap = new ByteArrayInputStream(mapParse.getBytes(StandardCharsets.UTF_8.name()));
+            Log.d(TAG, "Setting kml map");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        addLayer();
+        selectedSong = (Song)intent.getSerializableExtra("selectedSong");
+        Log.d(TAG, "selected song" + selectedSong.getNumber());
+        songLyrics = (String)intent.getSerializableExtra("songLyrics");
+        Log.d(TAG, "Lyrics" + songLyrics);
+        placemarkCoordinates = (ArrayList<double[]>)intent.getSerializableExtra("placemarkCoordinates");
 
     }
 
-    public void addLayer(){
+    public void addLayer() {
         try {
-            if(mMap != null && kmlMap != null) {
-                Log.d(TAG, "Adding layer");
-                KmlLayer layer = new KmlLayer(mMap, kmlMap, getApplicationContext());
+            if (mMap != null && kmlMap != null) {
+
+                layer = new KmlLayer(mMap, kmlMap, getApplicationContext());
                 layer.addLayerToMap();
+                Log.d(TAG, "Adding layer" + layer.getContainers());
             }
         } catch (XmlPullParserException e) {
             e.printStackTrace();
@@ -170,7 +175,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 "[onLocationChanged] Lat / long now (" +
                         String.valueOf(current.getLatitude()) + "," +
                         String.valueOf(current.getLongitude()) + ")");
-        // Do something with current location
+
+        for (int x = 0; x < placemarkCoordinates.size(); x++) {
+            Log.d(TAG, "current placemark  " + placemarkCoordinates.get(x)[0] + " " + placemarkCoordinates.get(x)[1]);
+            final int R = 6371; // Radius of the earth
+
+            double lat1 = current.getLatitude();
+            double lat2 = placemarkCoordinates.get(x)[0];
+            double lon1 = current.getLongitude();
+            double lon2 = placemarkCoordinates.get(x)[1];
+            //Log.d(TAG, "placemark latitude " + lat2);
+
+            double latDistance = Math.toRadians(lat2 - lat1);
+            double lonDistance = Math.toRadians(lon2 - lon1);
+            double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                    + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                    * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            double distance = R * c * 1000; // convert to meters
+
+            distance = Math.pow(distance, 2);
+            distance = Math.sqrt(distance);
+            Log.d(TAG, "distance " + distance);
+            if(distance < 10){
+                //do something
+            }
+
+
+        }
+
     }
 
     @Override

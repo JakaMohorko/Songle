@@ -44,22 +44,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://www.inf.ed.ac.uk/teaching/courses/selp/data/songs/songs.txt", new
-
-                TextHttpResponseHandler() {
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        updateSongs(responseString);
-                    }
-                }
-        );
+        Intent intent = getIntent();
+        String songXML = (String) intent.getSerializableExtra("songXML");
+        updateSongs(songXML);
     }
 
     public void updateSongs(String SongList) {
@@ -119,12 +106,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchActivity (View view){
-        Intent intent = new Intent(this, MapsActivity.class);
+        Intent intent = new Intent(this, DifficultySelect.class);
 
         Random generator = new Random();
         int x = generator.nextInt(getSongList().size()-1);
-        Log.d(TAG, "song number " + getSongList().get(x).getNumber() + " " + x);
         intent.putExtra("song", getSongList().get(x));
+
+        Log.d(TAG, "song number " + getSongList().get(x).getNumber() + " " + x);
         startActivity(intent);
     }
 
