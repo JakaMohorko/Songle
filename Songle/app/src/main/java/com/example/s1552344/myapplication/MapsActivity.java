@@ -126,6 +126,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
         try {
             mMap.setMyLocationEnabled(true);
         } catch (SecurityException se) {
@@ -134,6 +135,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         addLayer();
     }
+
 
     protected void createLocationRequest() {
         // Set the parameters for the location request
