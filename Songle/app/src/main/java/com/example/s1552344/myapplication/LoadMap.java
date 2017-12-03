@@ -1,26 +1,44 @@
 package com.example.s1552344.myapplication;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import cz.msebera.android.httpclient.Header;
 
-public class LoadMap extends AppCompatActivity {
+public class LoadMap extends Activity {
 
 
     private static final String TAG = "Load Map";
@@ -28,14 +46,24 @@ public class LoadMap extends AppCompatActivity {
     Song selectedSong;
     String songLyrics = "";
     ArrayList<double[]> coordinates = new ArrayList<>();
+    ArrayList<String> names = new ArrayList<>();
+    ArrayList<String> styles = new ArrayList<>();
+    ConcurrentHashMap<String, Bitmap> icons = new ConcurrentHashMap<>();
+    ArrayList<String[]> parsedLyrics = new ArrayList<>();
+    ArrayList<Song> songList;
+    String difficulty;
+    volatile boolean dialogCreated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_load_map);
         Intent intent = getIntent();
         AsyncHttpClient client = new AsyncHttpClient();
         selectedSong = (Song)(intent.getSerializableExtra("song"));
+        songList = (ArrayList<Song>) intent.getSerializableExtra("songList");
+        difficulty = (String) intent.getSerializableExtra("difficulty");
         String url = "http://www.inf.ed.ac.uk/teaching/courses/selp/data/songs/" + selectedSong.getNumber() + "/map" +
                 intent.getSerializableExtra("difficulty") + ".kml";
         Log.d(TAG, url);
@@ -46,6 +74,10 @@ public class LoadMap extends AppCompatActivity {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         Log.d(TAG, "DL failure");
+                        if(!dialogCreated) {
+                            dialogCreated=true;
+                            downloadFail();
+                        }
                     }
 
                     @Override
@@ -60,30 +92,141 @@ public class LoadMap extends AppCompatActivity {
         );
 
         url = "http://www.inf.ed.ac.uk/teaching/courses/selp/data/songs/" + selectedSong.getNumber() + "/words.txt";
+        System.out.println(url);
         client.get(url, new
 
                 TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         Log.d(TAG, "DL failure");
+                        if(!dialogCreated) {
+                            dialogCreated=true;
+                            downloadFail();
+                        }
                     }
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        Log.d(TAG, "DL success");
+                        Log.d(TAG, "DL success" );
                         songLyrics = responseString;
                             switchActivity();
 
                     }
                 }
         );
+
+        url = "http://maps.google.com/mapfiles/kml/paddle/red-stars.png";
+        client.get(url, new
+
+                AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                        icons.put("veryinteresting", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
+                        switchActivity();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        if(!dialogCreated) {
+                            dialogCreated=true;
+                            downloadFail();
+                        }
+                    }
+                }
+        );
+
+        url = "http://maps.google.com/mapfiles/kml/paddle/orange-diamond.png";
+        client.get(url, new
+
+                AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                        icons.put("interesting", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
+                        switchActivity();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        if(!dialogCreated) {
+                            dialogCreated=true;
+                            downloadFail();
+                        }
+
+                    }
+                }
+        );
+        url = "http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png";
+        client.get(url, new
+
+                AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                        icons.put("notboring", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
+                        switchActivity();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                        if(!dialogCreated) {
+                            dialogCreated=true;
+                            downloadFail();
+                        }
+                    }
+                }
+        );
+        url = "http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png";
+        client.get(url, new
+
+                AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                        icons.put("boring", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
+                        switchActivity();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        if(!dialogCreated) {
+                            dialogCreated=true;
+                            downloadFail();
+                        }
+                    }
+                }
+        );
+        url = "http://maps.google.com/mapfiles/kml/paddle/wht-blank.png";
+        client.get(url, new
+
+                AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                        icons.put("unclassified", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
+                        switchActivity();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        if(!dialogCreated) {
+                            dialogCreated=true;
+                            downloadFail();
+                        }
+                    }
+                }
+        );
+
     }
 
     public void switchActivity() {
-        if(kmlMap != "" && songLyrics != "") {
+        Log.d(TAG, "no of icons: " + icons.size());
+        if(kmlMap != "" && songLyrics != "" && icons.size()==5) {
 
             getCoordinates();
-
+            parseLyrics();
             Intent intent = new Intent(this, MapsActivity.class);
 
             for (int x = 0; x < coordinates.size(); x++) {
@@ -91,13 +234,35 @@ public class LoadMap extends AppCompatActivity {
             }
 
             Log.d(TAG, "map load");
+            Log.d(TAG, "icon list: " + icons);
+            Log.d(TAG, "style list: " + styles);
+            Log.d(TAG, "name list: " + names);
+            Log.d(TAG, "coordinate list: " + coordinates);
+
+            intent.putExtra("placemarkIcons", icons);
+            intent.putExtra("placemarkStyles", styles);
+            intent.putExtra("placemarkNames", names);
             intent.putExtra("placemarkCoordinates", coordinates);
-            intent.putExtra("kmlMap", kmlMap);
             intent.putExtra("selectedSong", selectedSong);
-            intent.putExtra("songLyrics", songLyrics);
+            intent.putExtra("songLyrics", parsedLyrics);
+            intent.putExtra("songList",  songList);
+            intent.putExtra("difficulty", difficulty);
             Log.d(TAG, "Map loaded");
             startActivity(intent);
+            finish();
         }
+    }
+
+    public void parseLyrics(){
+        String lines[] = songLyrics.split("\\r?\\n");
+        for (int x = 0; x < lines.length;x++){
+            if(lines[x].length()>7) {
+                parsedLyrics.add((lines[x].substring(7)).split(" "));
+            }else{
+                parsedLyrics.add(lines[x].split(" "));
+            }
+        }
+
     }
 
     public void getCoordinates(){
@@ -122,9 +287,15 @@ public class LoadMap extends AppCompatActivity {
                     currentTag = "";
                 } else if (eventType == XmlPullParser.TEXT) {
                     Log.d(TAG, "Text " + xpp.getText()); // here you get the text from xml
+                    if(currentTag.equals("name")){
+                        names.add(new String(xpp.getText()));
+                    }
                     if (currentTag.equals("coordinates")) {
                         List<String> tempCoordinates = Arrays.asList(xpp.getText().split(","));
                         coordinates.add(new double[]{Double.parseDouble(tempCoordinates.get(1)), Double.parseDouble(tempCoordinates.get(0)) });
+                    }
+                    if (currentTag.equals("description")){
+                        styles.add(new String(xpp.getText()));
                     }
                 }
                 eventType = xpp.next();
@@ -136,5 +307,34 @@ public class LoadMap extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+    public void downloadFail(){
+        new MaterialDialog.Builder(this)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        recreate();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        finish();
+
+                    }
+                })
+                .canceledOnTouchOutside(true)
+                .cancelListener( new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        finish();
+                    }
+                })
+                .title("Download failed")
+                .content("Press Retry to try downloading the data anew, press Exit to close the application.")
+                .positiveText("Retry")
+                .negativeText("Exit")
+                .show();
     }
 }

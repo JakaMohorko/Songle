@@ -1,34 +1,46 @@
 package com.example.s1552344.myapplication;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.BinaryHttpResponseHandler;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private static final String TAG = "Song list parse";
 
     //list of songs
     private static ArrayList<Song> SongList = new ArrayList<>();
-
 
     //Getters and Setters
     public static ArrayList<Song> getSongList() {
@@ -41,8 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_main);
+
 
         Intent intent = getIntent();
         String songXML = (String) intent.getSerializableExtra("songXML");
@@ -56,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             factory.setNamespaceAware(true);
             XmlPullParser xpp = factory.newPullParser();
 
+            getSongList().clear();
             xpp.setInput(new StringReader(SongList)); // pass input whatever xml you have
             int eventType = xpp.getEventType();
             String currentTag = "";
@@ -108,12 +125,74 @@ public class MainActivity extends AppCompatActivity {
     public void switchActivity (View view){
         Intent intent = new Intent(this, DifficultySelect.class);
 
-        Random generator = new Random();
-        int x = generator.nextInt(getSongList().size()-1);
-        intent.putExtra("song", getSongList().get(x));
 
-        Log.d(TAG, "song number " + getSongList().get(x).getNumber() + " " + x);
+        intent.putExtra("songList", getSongList());
+
         startActivity(intent);
+    }
+    public void switchStatistics (View view){
+        Intent intent = new Intent(this, GameplayStatistics.class);
+
+        FileInputStream fis = null;
+        String output = "";
+        try {
+            fis = openFileInput("data.txt");
+
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                output = output + line + "\n";
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("statistics", output);
+        startActivity(intent);
+    }
+    public void switchSongs (View view){
+        Intent intent = new Intent(this, SongList.class);
+
+        FileInputStream fis = null;
+        String output = "";
+        try {
+            fis = openFileInput("solved.txt");
+
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                output = output + line + "\n";
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("songs", output);
+        startActivity(intent);
+    }
+    public void switchAchievements (View view){
+        Intent intent = new Intent(this, Achievements.class);
+
+        startActivity(intent);
+    }
+    public void exit (View view){
+        finish();
+
+    }
+
+    public void switchHelp (View view){
+        Intent intent = new Intent(this, HelpMain.class);
+
+        startActivity(intent);
+
     }
 
 }

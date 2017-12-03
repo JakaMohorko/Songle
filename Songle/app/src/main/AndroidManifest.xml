@@ -33,8 +33,9 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity android:name=".MainActivity"></activity>
+            android:label="@string/title_activity_maps"
+            android:theme="@style/MaterialDrawerTheme.Light" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".DifficultySelect" />
         <activity android:name=".LoadSongList">
             <intent-filter>
@@ -43,7 +44,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoadMap"></activity>
+        <activity android:name=".LoadMap" />
+        <activity
+            android:name=".GuessSong"
+            android:theme="@style/Theme.MyAppCompat" />
+        <activity
+            android:name=".WordsActivity"
+            android:theme="@style/Theme.MyAppCompat" />
+        <activity
+            android:name=".GameplayStatistics"
+            android:theme="@style/Theme.MyAppCompat" />
+        <activity
+            android:name=".HelpMain"
+            android:theme="@style/Theme.MyAppCompat" />
+        <activity
+            android:name=".HelpDifficulty"
+            android:theme="@style/Theme.MyAppCompat" />
+        <activity
+            android:name=".MapsHelp"
+            android:theme="@style/Theme.MyAppCompat" />
+        <activity
+            android:name=".SongList"
+            android:theme="@style/Theme.MyAppCompat" />
+        <activity android:name=".Achievements"
+            android:theme="@style/Theme.MyAppCompat"></activity>
     </application>
 
 </manifest>
