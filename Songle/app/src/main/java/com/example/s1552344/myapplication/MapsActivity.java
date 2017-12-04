@@ -227,9 +227,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
     }
+
     @Override
-    public  void onPause(){
-        super.onPause();
+    public void onDestroy(){
+        super.onDestroy();
+
         FileInputStream fis = null;
         timeSpent = (System.currentTimeMillis()-startTime)/1000;
         Log.d(TAG, "editing data");
@@ -456,11 +458,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-
 
     }
 

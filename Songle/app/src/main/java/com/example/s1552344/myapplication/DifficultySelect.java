@@ -1,12 +1,17 @@
 package com.example.s1552344.myapplication;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -80,6 +85,19 @@ public class DifficultySelect extends Activity {
                 } else if (difficulty.equals("1") && arg.equals("Hardest")) {
                     alreadySolved = line.split(" ");
                 }
+            }
+            isr2.close();
+            bufferedReader2.close();
+            fis.close();
+
+            if(alreadySolved.length == songList.size()+2){
+                new MaterialDialog.Builder(this)
+
+                        .title("No songs left")
+                        .content("All of the songs currently available have already been beaten at the selected difficulty level. Please pick a different difficulty.")
+                        .positiveText("Return")
+                        .show();
+                return;
             }
             if(alreadySolved.length>1){
                 boolean newSong = false;

@@ -124,6 +124,9 @@ public class MainActivity extends Activity {
 
     public void switchActivity (View view){
         Intent intent = new Intent(this, DifficultySelect.class);
+        for(int x = 0; x < getSongList().size(); x++){
+            System.out.println("song number " + getSongList().get(x).getNumber());
+        }
 
 
         intent.putExtra("songList", getSongList());
