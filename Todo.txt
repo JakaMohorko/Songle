@@ -1,0 +1,12 @@
+### To-do list
+
+
+- [ ] Improve song guess recognition and string matching
+- [ ] Implement designed UI
+- [ ] Comment code
+- [ ] Implement unit testing
+- [ ] Write implementation documentation
+- [ ] Refactor code
+- [ ] Stabilize download on bad connection
+- [ ] Implement dialogs for user confirmation when pressing back button
+- [ ] Add resume game function (optional)
