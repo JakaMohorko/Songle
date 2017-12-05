@@ -65,7 +65,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
     //Map variables
@@ -96,6 +96,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<Marker> currentMarkers = new ArrayList<>();
     private HashMap<String, Bitmap> markerIcons;
 
+    //navigation drawer
+    Drawer result;
+
     //movement data
     private double savedLatitude;
     private double savedLongitude;
@@ -114,14 +117,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_maps);
 
-        AccountHeader headerResult = new AccountHeaderBuilder()
-                .withActivity(this)
-                .build();
 
-        Drawer result = new DrawerBuilder()
+
+        result = new DrawerBuilder()
                 .withActivity(this)
-                .withAccountHeader(headerResult)
+                .withTranslucentStatusBar(true)
+                .withActionBarDrawerToggle(true)
                 .addDrawerItems(
+                        new DividerDrawerItem(),
                         item1,
                         new DividerDrawerItem(),
                         item2,
@@ -155,6 +158,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 })
                 .build();
+
+
+
         result.setSelection(999);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -171,9 +177,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .build();
         }
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+
 
         startTime = System.currentTimeMillis();
 
@@ -190,12 +194,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         songList = (ArrayList<Song>) intent.getSerializableExtra("songList");
         addMarkers();
 
-        for(int x= 0; x < songLyrics.size();x++){
-            for(int y = 0; y < songLyrics.get(x).length; y++){
-                System.out.print(songLyrics.get(x)[y] + " " + "word" + " ");
-            }
-            System.out.println();
-        }
     }
 
     public void addMarkers() {
@@ -553,7 +551,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             distance = Math.pow(distance, 2);
             distance = Math.sqrt(distance);
             Log.d(TAG, "distance " + distance);
-            if(distance < 1500){
+            if(distance < 15){
                 String[] tempNames = placemarkNames.get(x).split(":");
                 int first = Integer.parseInt(tempNames[0]);
                 int second = Integer.parseInt(tempNames[1]);
@@ -619,11 +617,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = new Intent (this, GuessSong.class);
 
         intent.putExtra("selectedSong", selectedSong);
+        intent.putExtra("distance", distanceWalked);
+        intent.putExtra("time", startTime);
+        intent.putExtra("placemarks", placemarksCollected);
+
         startActivity(intent);
     }
     public void switchHelp(){
         Intent intent = new Intent (this, MapsHelp.class);
 
         startActivity(intent);
+    }
+    public  void toggleDrawer(View view){
+        result.openDrawer();
+    }
+
+    public void guessSong(View view){
+        switchGuess();
     }
 }

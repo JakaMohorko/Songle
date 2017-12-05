@@ -3,6 +3,7 @@ package com.example.s1552344.myapplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PixelFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -63,6 +64,13 @@ public class MainActivity extends Activity {
         Intent intent = getIntent();
         String songXML = (String) intent.getSerializableExtra("songXML");
         updateSongs(songXML);
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        Window window = getWindow();
+        window.setFormat(PixelFormat.RGBA_8888);
     }
 
     public void updateSongs(String SongList) {
@@ -133,28 +141,12 @@ public class MainActivity extends Activity {
 
         startActivity(intent);
     }
+
+
+
     public void switchStatistics (View view){
         Intent intent = new Intent(this, GameplayStatistics.class);
 
-        FileInputStream fis = null;
-        String output = "";
-        try {
-            fis = openFileInput("data.txt");
-
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            String line;
-
-            while ((line = bufferedReader.readLine()) != null) {
-                output = output + line + "\n";
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        intent.putExtra("statistics", output);
         startActivity(intent);
     }
     public void switchSongs (View view){

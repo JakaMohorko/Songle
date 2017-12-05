@@ -4,97 +4,116 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/blue_radiant"
     tools:context="com.example.s1552344.myapplication.DifficultySelect">
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="148dp"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="100dp"
-        android:onClick="easiest"
-        android:text="Easiest"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="148dp"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="16dp"
-        android:onClick="easy"
-        android:text="Easy"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        android:id="@+id/button12"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/help"
+        android:onClick="switchHelp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="148dp"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="16dp"
-        android:onClick="medium"
-        android:text="Medium"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
-
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="148dp"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="16dp"
-        android:onClick="hard"
-        android:text="Hard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button5" />
-
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="148dp"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="16dp"
-        android:onClick="hardest"
-        android:text="Hardest"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button6" />
-
-    <Button
-        android:id="@+id/button11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="17dp"
-        android:layout_marginStart="16dp"
+        android:id="@+id/button14"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/back"
         android:onClick="back"
-        android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button14"
-        android:layout_width="wrap_content"
+        android:id="@+id/button13"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:onClick="switchHelp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="120dp"
+        app:layout_constraintBottom_toTopOf="@+id/button12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.875"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="0dp"
+            android:layout_height="130dp"
+            android:background="@drawable/menu_button"
+            android:onClick="easy"
+            android:text="easy"
+            app:layout_constraintBottom_toTopOf="@+id/button16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/button15"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button15"
+            android:layout_width="0dp"
+            android:layout_height="130dp"
+            android:background="@drawable/menu_button"
+            android:onClick="easiest"
+            android:text="easiest"
+            app:layout_constraintBottom_toTopOf="@+id/button17"
+            app:layout_constraintEnd_toStartOf="@+id/button2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button16"
+            android:layout_width="0dp"
+            android:layout_height="130dp"
+            android:background="@drawable/menu_button"
+            android:onClick="hard"
+            android:text="hard"
+            app:layout_constraintBottom_toTopOf="@+id/button18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/button17"
+            app:layout_constraintTop_toBottomOf="@+id/button2" />
+
+        <Button
+            android:id="@+id/button17"
+            android:layout_width="0dp"
+            android:layout_height="130dp"
+            android:background="@drawable/menu_button"
+            android:onClick="medium"
+            android:text="medium"
+            app:layout_constraintBottom_toTopOf="@+id/button18"
+            app:layout_constraintEnd_toStartOf="@+id/button16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button15" />
+
+        <Button
+            android:id="@+id/button18"
+            android:layout_width="0dp"
+            android:layout_height="130dp"
+            android:background="@drawable/menu_button"
+            android:onClick="hardest"
+            android:text="hardest"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button16" />
+    </android.support.constraint.ConstraintLayout>
+
+
 </android.support.constraint.ConstraintLayout>

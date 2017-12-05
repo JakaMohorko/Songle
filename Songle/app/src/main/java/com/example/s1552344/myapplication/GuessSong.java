@@ -1,8 +1,10 @@
 package com.example.s1552344.myapplication;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,11 +12,17 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import java.util.Random;
 
 public class GuessSong extends AppCompatActivity {
     Song selectedSong;
     EditText mEdit;
+    int collectedPlacemarks;
+    long timeSpent;
+    double distanceWalked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +33,9 @@ public class GuessSong extends AppCompatActivity {
         mEdit   = (EditText)findViewById(R.id.editText);
         Intent intent = getIntent();
         selectedSong = (Song)intent.getSerializableExtra("selectedSong");
+        distanceWalked = (double)intent.getSerializableExtra("distance");
+        timeSpent = (long)intent.getSerializableExtra("time");
+        collectedPlacemarks = (int)intent.getSerializableExtra("placemarks");
     }
 
     public void switchActivity (View view){
@@ -33,19 +44,29 @@ public class GuessSong extends AppCompatActivity {
         if(selectedSong.getTitle().toLowerCase().equals(mEdit.getText().toString().toLowerCase())) {
             System.out.println("correct");
 
+
+
             SharedPreferences settings = getSharedPreferences("prefsFile", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("solved", true);
             editor.commit();
 
-            Intent intent = new Intent(this, MainActivity.class);
-
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP );
+            Intent intent = new Intent(this, Success.class);
+            intent.putExtra("selectedSong", selectedSong);
+            intent.putExtra("distance", distanceWalked);
+            intent.putExtra("placemarks", collectedPlacemarks);
+            timeSpent = (System.currentTimeMillis()-timeSpent) /1000;
+            intent.putExtra("time", timeSpent);
+           //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP );
 
             startActivity(intent);
             finish();
 
         }else{
+            new MaterialDialog.Builder(this)
+                    .title("Incorrect guess")
+                    .positiveText("Retry")
+                    .show();
             System.out.println("incorrect");
         }
 

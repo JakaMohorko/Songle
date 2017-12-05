@@ -4,29 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/blue_radiant">
     tools:context="com.example.s1552344.myapplication.WordsActivity">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="0dp"
-        android:layout_height="397dp"
+        android:layout_height="0dp"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:scrollbars="vertical"
         android:text="abc"
+        app:layout_constraintBottom_toTopOf="@+id/button20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="17dp"
-        android:layout_marginStart="16dp"
+        android:id="@+id/button20"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/back"
         android:onClick="back"
-        android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>
