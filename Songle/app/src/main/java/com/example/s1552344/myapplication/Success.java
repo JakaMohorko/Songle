@@ -23,16 +23,16 @@ public class Success extends AppCompatActivity {
         distanceWalked = (double)intent.getSerializableExtra("distance");
         timeSpent = (long)intent.getSerializableExtra("time");
         collectedPlacemarks = (int)intent.getSerializableExtra("placemarks");
+        int time = (int)(timeSpent/60);
 
         String output = "Artist: " + selectedSong.getArtist() + "\n" +
-                "Title: " + selectedSong.getTitle() + "\n" +
-                "Link: " + selectedSong.getLink() + "\n\n\n"+
-                "Time spent: " + (timeSpent/60) + " minutes " + (timeSpent-(timeSpent/60)) + " seconds" + "\n"+
+                "Title: " + selectedSong.getTitle() + "\n" + "\n\n\n"+
+                "Time spent: " + time + " min " + (timeSpent-time*60) + " s" + "\n"+
                 "Placemarks collected: " + collectedPlacemarks + "\n"+
-                "Distance walked: " + distanceWalked + " meters";
+                "Distance walked: " + (int)distanceWalked + " m";
 
 
-        TextView mytxt=(TextView ) findViewById(R.id.textView);
+        TextView mytxt=(TextView ) findViewById(R.id.textView7);
         mytxt.setText(output);
         mytxt.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
@@ -43,5 +43,14 @@ public class Success extends AppCompatActivity {
 
         startActivity(intent);
         finish();
+    }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP );
+
+        startActivity(intent);
+        finish();
+
     }
 }

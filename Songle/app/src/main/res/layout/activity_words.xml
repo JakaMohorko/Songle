@@ -16,6 +16,8 @@
         android:layout_marginTop="32dp"
         android:scrollbars="vertical"
         android:text="abc"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/button22"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

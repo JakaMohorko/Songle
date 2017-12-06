@@ -34,64 +34,69 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
-            android:theme="@style/MaterialDrawerTheme.Light"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/MaterialDrawerTheme.Light" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
         <activity
             android:name=".DifficultySelect"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
         <activity
             android:name=".LoadSongList"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoadMap"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".LoadMap"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
         <activity
             android:name=".GuessSong"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
         <activity
             android:name=".WordsActivity"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
         <activity
             android:name=".GameplayStatistics"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
         <activity
             android:name=".HelpMain"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
         <activity
             android:name=".HelpDifficulty"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
         <activity
-            android:name=".MapsHelp"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait"/>
+            android:name=".HelpMaps"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
         <activity
             android:name=".SongList"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
         <activity
             android:name=".Achievements"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Success"
-            android:theme="@style/Theme.MyAppCompat"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
+        <activity
+            android:name=".Success"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
+        <activity android:name=".HelpSongList"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat"></activity>
     </application>
 
 </manifest>

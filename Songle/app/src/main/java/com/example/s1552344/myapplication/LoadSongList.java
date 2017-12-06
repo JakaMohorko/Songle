@@ -60,6 +60,7 @@ public class LoadSongList extends Activity {
         if (!file.exists()) {
             String filename = "data.txt";
             String string = "DistanceWalked 0\n" +
+                    "PlacemarksCollected 0\n" +
                     "TotalSolved 0\n" +
                     "EasiestSolved 0\n" +
                     "EasySolved 0\n" +
@@ -71,7 +72,6 @@ public class LoadSongList extends Activity {
                     "FastestTimeMedium 0\n" +
                     "FastestTimeHard 0\n" +
                     "FastestTimeHardest 0\n" +
-                    "PlacemarksCollected 0\n" +
                     "AverageTimeEasiest 0\n" +
                     "AverageTimeEasy 0\n" +
                     "AverageTimeMedium 0\n" +

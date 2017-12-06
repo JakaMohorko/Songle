@@ -152,25 +152,7 @@ public class MainActivity extends Activity {
     public void switchSongs (View view){
         Intent intent = new Intent(this, SongList.class);
 
-        FileInputStream fis = null;
-        String output = "";
-        try {
-            fis = openFileInput("solved.txt");
 
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            String line;
-
-            while ((line = bufferedReader.readLine()) != null) {
-                output = output + line + "\n";
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        intent.putExtra("songs", output);
         startActivity(intent);
     }
     public void switchAchievements (View view){

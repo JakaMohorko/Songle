@@ -1,12 +1,9 @@
 package com.example.s1552344.myapplication;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
-import android.view.Window;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -17,15 +14,16 @@ import java.util.ArrayList;
 
 public class Achievements extends AppCompatActivity {
 
-    String achievements = "";
+    private ArrayList<Achievement> achievsList = new ArrayList<>();
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_words);
-        String[][] achievs = {
-                {   "Collect 100 placemarks",
+        setContentView(R.layout.activity_achievements);
+        String[] achievs = {
+                    "Collect 100 placemarks",
                     "Collect 500 placemarks",
                     "Collect 1000 placemarks",
                     "Collect 2000 placemarks",
@@ -38,13 +36,18 @@ public class Achievements extends AppCompatActivity {
                     "Complete a song puzzle in under 5 minutes",
                     "Complete a song puzzle in under 10 minutes",
                     "Complete a \"hardest\" song puzzle"
-                },
-                {
-                    "False","False","False","False","False","False","False","False","False","False","False","False","False",
-                }
+                };
+
+        String[] obtained = {
+                    "Not completed","Not completed","Not completed","Not completed",
+                "Not completed","Not completed","Not completed","Not completed",
+                "Not completed","Not completed","Not completed","Not completed","Not completed",
+                };
+
+        String[] progress = {
+                "0/100","0/500","0/1000","0/5000","0/5","0/10","0/50","0/1","0/10","0/20","0/1","0/1","0/1"
         };
         FileInputStream fis = null;
-        String output = "";
         try {
             fis = openFileInput("data.txt");
 
@@ -57,25 +60,42 @@ public class Achievements extends AppCompatActivity {
                 int val = Integer.parseInt(line.split(" ")[1]);
 
                 if(arg.equals("DistanceWalked")){
+
                     if(val>=5000){
-                        achievs[1][4] = "True";
+                        obtained[4] = "Completed";
+                        progress[4] = "5/5";
+                    }else{
+                        progress[4] = val/1000 + "/5";
                     }
                     if(val>=10000){
-                        achievs[1][5] = "True";
+                        obtained[5] = "Completed";
+                        progress[5] = "10/10";
+                    }else{
+                        progress[5] = val/1000 + "/10";
                     }
                     if(val>=50000){
-                        achievs[1][6] = "True";
+                        obtained[6] = "Completed";
+                        progress[6] = "50/50";
+                    }else{
+                        progress[6] = val/1000 + "/50";
                     }
                 }
                 if(arg.equals("TotalSolved")){
                     if(val>=1){
-                        achievs[1][7] = "True";
+                        obtained[7] = "Completed";
+                        progress[7] = "1/1";
                     }
                     if(val>=10){
-                        achievs[1][8] = "True";
+                        obtained[8] = "Completed";
+                        progress[8] = "10/10";
+                    }else{
+                        progress[8] = val +"/10";
                     }
                     if(val>=20){
-                        achievs[1][9] = "True";
+                        obtained[9] = "Completed";
+                        progress[9] = "20/20";
+                    }else{
+                        progress[9] = val +"/20";
                     }
                 }
                 if(arg.equals("EasiestSolved")){
@@ -88,62 +108,85 @@ public class Achievements extends AppCompatActivity {
                 }
                 if(arg.equals("HardestSolved")){
                     if(val!=0){
-                        achievs[1][12] = "True";
+                        obtained[12] = "Completed";
+                        progress[12] = "1/1";
                     }
                 }
                 if(arg.equals("FastestTimeEasiest")){
                     if(val<=300 && val!=0){
-                        achievs[1][10] ="True";
+                        obtained[10] ="Completed";
+                        progress[10] = "1/1";
                     }
                     if(val<=600 && val != 0){
-                        achievs[1][11] = "True";
+                        obtained[11] = "Completed";
+                        progress[11] = "1/1";
                     }
                 }
                 if(arg.equals("FastestTimeEasy")){
                     if(val<=300 && val!=0){
-                        achievs[1][10] ="True";
+                        obtained[10] ="Completed";
+                        progress[10] = "1/1";
                     }
                     if(val<=600 && val != 0){
-                        achievs[1][11] = "True";
+                        obtained[11] = "Completed";
+                        progress[11] = "1/1";
                     }
                 }
                 if(arg.equals("FastestTimeMedium")){
                     if(val<=300 && val!=0){
-                        achievs[1][10] ="True";
+                        obtained[10] ="Completed";
+                        progress[10] = "1/1";
                     }
                     if(val<=600 && val != 0){
-                        achievs[1][11] = "True";
+                        obtained[11] = "Completed";
+                        progress[11] = "1/1";
                     }
                 }
                 if(arg.equals("FastestTimeHard")){
                     if(val<=300 && val!=0){
-                        achievs[1][10] ="True";
+                        obtained[10] ="Completed";
+                        progress[10] = "1/1";
                     }
                     if(val<=600 && val != 0){
-                        achievs[1][11] = "True";
+                        obtained[11] = "Completed";
+                        progress[11] = "1/1";
                     }
                 }
                 if(arg.equals("FastestTimeHardest")){
                     if(val<=300 && val!=0){
-                        achievs[1][10] ="True";
+                        obtained[10] ="Completed";
+                        progress[10] = "1/1";
                     }
                     if(val<=600 && val != 0){
-                        achievs[1][11] = "True";
+                        obtained[11] = "Completed";
+                        progress[11] = "1/1";
                     }
 
                 }
                 if(arg.equals("PlacemarksCollected")){
                     if(val>=100){
-                        achievs[1][0] = "True";
+                        obtained[0] = "Completed";
+                        progress[0] = "100/100";
+                    }else{
+                        progress[0] = val+"/100";
                     }
                     if(val >= 500){
-                        achievs[1][1] = "True";
+                        obtained[1] = "Completed";
+                        progress[1] = "500/500";
+                    }else{
+                        progress[1] = val+"/500";
                     }
                     if(val >= 1000){
-                        achievs[1][2] = "True";
+                        obtained[2] = "Completed";
+                        progress[2] = "1000/1000";
+                    }else{
+                        progress[2] = val+"/1000";
                     }
                     if(val >= 2000){
-                        achievs[1][3] = "True";
+                        obtained[3] = "Completed";
+                        progress[3] = "2000/2000";
+                    }else{
+                        progress[3] = val+"/2000";
                     }
                 }
                 if(arg.equals("AverageTimeEasiest")){
@@ -158,7 +201,6 @@ public class Achievements extends AppCompatActivity {
                 }
 
 
-                output = output + arg + " " + val + "\n";
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -168,14 +210,19 @@ public class Achievements extends AppCompatActivity {
 
 
         for(int x = 0; x < 13; x++){
-            achievements = achievements + achievs[0][x] + ":   " + achievs[1][x] + "\n\n";
+            achievsList.add(new Achievement(achievs[x],progress[x],obtained[x]));
         }
 
 
+        mListView = (ListView) findViewById(R.id.listViewAchievs);
+        System.out.println("adapter " + mListView);
 
-        TextView mytxt=(TextView ) findViewById(R.id.textView);
-        mytxt.setText(achievements);
-        mytxt.setMovementMethod(ScrollingMovementMethod.getInstance());
+        AchievementsListAdapter adapter = new AchievementsListAdapter(this, achievsList);
+        mListView.setAdapter(adapter);
+
+        //TextView mytxt=(TextView ) findViewById(R.id.textView);
+        //mytxt.setText(achievements);
+        //mytxt.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
     public void back (View view){
         finish();

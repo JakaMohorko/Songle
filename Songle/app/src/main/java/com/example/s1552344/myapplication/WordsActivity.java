@@ -26,7 +26,7 @@ public class WordsActivity extends AppCompatActivity {
         collectedWords = (ArrayList<String>) intent.getSerializableExtra("collectedWords");
 
         for(int x = 0; x < collectedWords.size(); x++){
-            words = words + collectedWords.get(x)+ "\n";
+            words = words + "      " + (x+1) + " | " + collectedWords.get(x)+ "\n";
         }
 
         TextView mytxt=(TextView ) findViewById(R.id.textView);

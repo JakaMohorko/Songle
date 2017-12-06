@@ -5,17 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/blue_radiant">
-    tools:context="com.example.s1552344.myapplication.WordsActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
+    <ListView
+        android:id="@+id/listViewSongs"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:scrollbars="vertical"
-        android:text="abc"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toTopOf="@+id/button15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,4 +27,14 @@
         android:onClick="back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+    <Button
+        android:id="@+id/button29"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/help"
+        android:onClick="switchHelp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </android.support.constraint.ConstraintLayout>

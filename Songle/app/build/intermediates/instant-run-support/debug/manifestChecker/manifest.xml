@@ -91,7 +91,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MyAppCompat" />
         <activity
-            android:name="com.example.s1552344.myapplication.MapsHelp"
+            android:name="com.example.s1552344.myapplication.HelpMaps"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MyAppCompat" />
         <activity
@@ -104,6 +104,10 @@
             android:theme="@style/Theme.MyAppCompat" />
         <activity
             android:name="com.example.s1552344.myapplication.Success"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MyAppCompat" />
+        <activity
+            android:name="com.example.s1552344.myapplication.HelpSongList"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MyAppCompat" />
 

@@ -12,17 +12,21 @@ import java.util.ArrayList;
 
 public class HelpMain extends AppCompatActivity {
 
-    String help = "Insert help data here Insert help data here Insert help data here Insert help data here Insert help data hereInsert help data here";
+    String help = "    - Select Play to start a new game of a difficulty of choice.\n\n"+
+            "    - Select Song List to view the list of songs you've already encountered and beaten.\n\n"+
+            "    - The achievements window will show you your progress towards the achievements available in the game.\n\n"+
+            "    - Select Statistics to view data about your gameplay sessions.\n\n"+
+            "    - You can quit the game by pressing the Exit button.";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_words);
+        setContentView(R.layout.activity_help_main);
 
 
 
-        TextView mytxt=(TextView ) findViewById(R.id.textView);
+        TextView mytxt=(TextView ) findViewById(R.id.textView4);
         mytxt.setText(help);
         mytxt.setMovementMethod(ScrollingMovementMethod.getInstance());
     }

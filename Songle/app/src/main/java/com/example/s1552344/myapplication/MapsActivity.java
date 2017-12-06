@@ -2,18 +2,18 @@ package com.example.s1552344.myapplication;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.util.Base64;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -21,6 +21,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -28,20 +30,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.data.kml.KmlLayer;
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -49,29 +45,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
-import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
-public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
     //Map variables
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private boolean cameraTracking = false;
 
 
     private static final String TAG = "MapsActivity";
@@ -88,6 +76,7 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
     private long timeSpent = 0;
     private int placemarksCollected = 0;
     private long startTime = 0;
+    private String difficultyName = "";
 
     //placemark data
     private ArrayList<double[]> placemarkCoordinates;
@@ -109,14 +98,15 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
     SecondaryDrawerItem item3 = new SecondaryDrawerItem().withIdentifier(3).withName("New Song").withSelectable(false);
     SecondaryDrawerItem item4 = new SecondaryDrawerItem().withIdentifier(4).withName("Main Menu").withSelectable(false);
     SecondaryDrawerItem item5 = new SecondaryDrawerItem().withIdentifier(5).withName("Help").withSelectable(false);
-
+    SecondaryDrawerItem item6 = new SecondaryDrawerItem().withIdentifier(6).withName("Enable Camera Tracking");
+    SecondaryDrawerItem item7 = new SecondaryDrawerItem().withIdentifier(7).withName("Disable Camera Tracking").withSetSelected(true);
+    SecondaryDrawerItem item8 = new SecondaryDrawerItem().withIdentifier(8).withName("Current song title").withSetSelected(true);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_maps);
-
 
 
         result = new DrawerBuilder()
@@ -133,7 +123,13 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
                         new DividerDrawerItem(),
                         item4,
                         new DividerDrawerItem(),
-                        item5
+                        item5,
+                        new DividerDrawerItem(),
+                        item6,
+                        item7,
+                        new DividerDrawerItem(),
+                        item8,
+                        new DividerDrawerItem()
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -149,16 +145,24 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
                             switchDiffSelect();
                         }
                         if (position == 7) {
-                            switchMain();
+                            exitCheck();
                         }
                         if (position == 9) {
                             switchHelp();
+                        }
+                        if(position == 11){
+                            cameraTracking=true;
+                        }
+                        if(position == 12){
+                            cameraTracking=false;
+                        }
+                        if(position == 14){
+                            showTitle();
                         }
                         return true;
                     }
                 })
                 .build();
-
 
 
         result.setSelection(999);
@@ -178,20 +182,22 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
         }
 
 
-
         startTime = System.currentTimeMillis();
 
         Intent intent = getIntent();
+
+        selectedSong = (Song) intent.getSerializableExtra("selectedSong");
         difficulty = Integer.parseInt((String) intent.getSerializableExtra("difficulty"));
-        selectedSong = (Song)intent.getSerializableExtra("selectedSong");
         Log.d(TAG, "selected song" + selectedSong.getNumber());
-        songLyrics = (ArrayList<String[]>)intent.getSerializableExtra("songLyrics");
+        songLyrics = (ArrayList<String[]>) intent.getSerializableExtra("songLyrics");
         Log.d(TAG, "Lyrics" + songLyrics);
-        placemarkCoordinates = (ArrayList<double[]>)intent.getSerializableExtra("placemarkCoordinates");
-        placemarkNames = (ArrayList<String>)intent.getSerializableExtra("placemarkNames");
+        placemarkCoordinates = (ArrayList<double[]>) intent.getSerializableExtra("placemarkCoordinates");
+        placemarkNames = (ArrayList<String>) intent.getSerializableExtra("placemarkNames");
         placemarkStyles = (ArrayList<String>) intent.getSerializableExtra("placemarkStyles");
-        markerIcons = (HashMap<String,Bitmap>) intent.getSerializableExtra("placemarkIcons");
+        markerIcons = (HashMap<String, Bitmap>) intent.getSerializableExtra("placemarkIcons");
         songList = (ArrayList<Song>) intent.getSerializableExtra("songList");
+
+
         addMarkers();
 
     }
@@ -200,11 +206,11 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
         Log.d(TAG, "adding markers 1 " + markerIcons);
         if (mMap != null && markerIcons != null) {
             Log.d(TAG, "adding markers 2");
-            for(int x = 0; x < placemarkNames.size(); x++){
+            for (int x = 0; x < placemarkNames.size(); x++) {
 
                 Log.d(TAG, "current icon " + markerIcons.get(placemarkStyles.get(x)));
 
-                currentMarkers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(placemarkCoordinates.get(x)[0],placemarkCoordinates.get(x)[1]))
+                currentMarkers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(placemarkCoordinates.get(x)[0], placemarkCoordinates.get(x)[1]))
                         .title(placemarkNames.get(x))
                         .icon(BitmapDescriptorFactory.fromBitmap(markerIcons.get(placemarkStyles.get(x))))));
             }
@@ -227,11 +233,11 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
 
         FileInputStream fis = null;
-        timeSpent = (System.currentTimeMillis()-startTime)/1000;
+        timeSpent = (System.currentTimeMillis() - startTime) / 1000;
         Log.d(TAG, "editing data");
         try {
             fis = openFileInput("data.txt");
@@ -246,76 +252,76 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
                 String arg = line.split(" ")[0];
                 int val = Integer.parseInt(line.split(" ")[1]);
 
-                if(arg.equals("DistanceWalked")){
+                if (arg.equals("DistanceWalked")) {
                     System.out.println(distanceWalked);
-                    val+=distanceWalked;
+                    val += distanceWalked;
                 }
-                if(arg.equals("TotalSolved") && solved){
+                if (arg.equals("TotalSolved") && solved) {
                     val++;
 
                 }
-                if(arg.equals("EasiestSolved")&& difficulty==5 && solved){
+                if (arg.equals("EasiestSolved") && difficulty == 5 && solved) {
                     val++;
-                    difSolved=val;
+                    difSolved = val;
                 }
-                if(arg.equals("EasySolved") && difficulty==4 && solved){
+                if (arg.equals("EasySolved") && difficulty == 4 && solved) {
                     val++;
-                    difSolved=val;
+                    difSolved = val;
                 }
-                if(arg.equals("MediumSolved") && difficulty==3 && solved){
+                if (arg.equals("MediumSolved") && difficulty == 3 && solved) {
                     val++;
-                    difSolved=val;
+                    difSolved = val;
                 }
-                if(arg.equals("HardSolved") && difficulty==2 && solved){
+                if (arg.equals("HardSolved") && difficulty == 2 && solved) {
                     val++;
-                    difSolved=val;
+                    difSolved = val;
                 }
-                if(arg.equals("HardestSolved")&& difficulty==1 && solved){
+                if (arg.equals("HardestSolved") && difficulty == 1 && solved) {
                     val++;
-                    difSolved=val;
+                    difSolved = val;
                 }
-                if(arg.equals("FastestTimeEasiest")&& difficulty==5 && solved){
-                    if(timeSpent < val || val == 0){
-                        val = (int)timeSpent;
+                if (arg.equals("FastestTimeEasiest") && difficulty == 5 && solved) {
+                    if (timeSpent < val || val == 0) {
+                        val = (int) timeSpent;
                     }
                 }
-                if(arg.equals("FastestTimeEasy")&& difficulty==4 && solved){
-                    if(timeSpent < val || val == 0){
-                        val = (int)timeSpent;
+                if (arg.equals("FastestTimeEasy") && difficulty == 4 && solved) {
+                    if (timeSpent < val || val == 0) {
+                        val = (int) timeSpent;
                     }
                 }
-                if(arg.equals("FastestTimeMedium") && difficulty==3 && solved){
-                    if(timeSpent < val || val == 0){
-                        val = (int)timeSpent;
+                if (arg.equals("FastestTimeMedium") && difficulty == 3 && solved) {
+                    if (timeSpent < val || val == 0) {
+                        val = (int) timeSpent;
                     }
                 }
-                if(arg.equals("FastestTimeHard")&& difficulty==2 && solved){
-                    if(timeSpent < val || val == 0){
-                        val = (int)timeSpent;
+                if (arg.equals("FastestTimeHard") && difficulty == 2 && solved) {
+                    if (timeSpent < val || val == 0) {
+                        val = (int) timeSpent;
                     }
                 }
-                if(arg.equals("FastestTimeHardest") && difficulty==1 && solved){
-                    if(timeSpent < val || val == 0){
-                        val = (int)timeSpent;
+                if (arg.equals("FastestTimeHardest") && difficulty == 1 && solved) {
+                    if (timeSpent < val || val == 0) {
+                        val = (int) timeSpent;
                     }
                 }
-                if(arg.equals("PlacemarksCollected")){
+                if (arg.equals("PlacemarksCollected")) {
                     val += placemarksCollected;
                 }
-                if(arg.equals("AverageTimeEasiest")&& difficulty==5 && solved){
-                    val = (val*(difSolved-1) + (int)timeSpent)/difSolved;
+                if (arg.equals("AverageTimeEasiest") && difficulty == 5 && solved) {
+                    val = (val * (difSolved - 1) + (int) timeSpent) / difSolved;
                 }
-                if(arg.equals("AverageTimeEasy")&& difficulty==4 && solved){
-                    val = (val*(difSolved-1) + (int)timeSpent)/difSolved;
+                if (arg.equals("AverageTimeEasy") && difficulty == 4 && solved) {
+                    val = (val * (difSolved - 1) + (int) timeSpent) / difSolved;
                 }
-                if(arg.equals("AverageTimeMedium")&& difficulty==3 && solved){
-                    val = (val*(difSolved-1) + (int)timeSpent)/difSolved;
+                if (arg.equals("AverageTimeMedium") && difficulty == 3 && solved) {
+                    val = (val * (difSolved - 1) + (int) timeSpent) / difSolved;
                 }
-                if(arg.equals("AverageTimeHard")&& difficulty==2 && solved){
-                    val = (val*(difSolved-1) + (int)timeSpent)/difSolved;
+                if (arg.equals("AverageTimeHard") && difficulty == 2 && solved) {
+                    val = (val * (difSolved - 1) + (int) timeSpent) / difSolved;
                 }
-                if(arg.equals("AverageTimeHardest")&& difficulty==1 && solved){
-                    val = (val*(difSolved-1) + (int)timeSpent)/difSolved;
+                if (arg.equals("AverageTimeHardest") && difficulty == 1 && solved) {
+                    val = (val * (difSolved - 1) + (int) timeSpent) / difSolved;
                 }
 
 
@@ -340,26 +346,46 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
 
             while ((line = bufferedReader1.readLine()) != null) {
                 System.out.println("current line: " + line);
-                if(("Title: " + selectedSong.getTitle()).equals(line)){
-                    alreadySolved=true;
-                    break;
-                }else if(line.split(" ")[0].equals("Total")){
-                    output = output + "Artist: " + selectedSong.getArtist()+ "\n";
+                if (("Title: " + selectedSong.getTitle()).equals(line)) {
+                    System.out.println("Song already in list" + selectedSong.getTitle());
+                    alreadySolved = true;
+                    output = output + line + "\n";
+                    line = bufferedReader1.readLine();
+                    int val = Integer.parseInt(line.split(" ")[2]);
+                    if (timeSpent < val) {
+                        output = output + "Best time: " + timeSpent + "\n";
+                    } else {
+                        output = output + line + "\n";
+                    }
+                    line = bufferedReader1.readLine();
+                    output = output + line + "\n";
+                    line = bufferedReader1.readLine();
+                    val = Integer.parseInt(line.split(" ")[2]);
+                    if (val > difficulty) {
+                        output = output + "Highest difficulty: " + difficulty + "\n";
+                    } else {
+                        output = output + line + "\n";
+
+                    }
+                } else if (line.split(" ")[0].equals("Total") && !alreadySolved) {
+                    output = output + "Artist: " + selectedSong.getArtist() + "\n";
                     output = output + "Title: " + selectedSong.getTitle() + "\n";
-                    output = output + "Link: " + selectedSong.getLink() + "\n\n";
-                    output = output + "Total songs found: " + (Integer.parseInt(line.split(" ")[3])+1);
+                    output = output + "Best time: " + timeSpent + "\n";
+                    output = output + "Link: " + selectedSong.getLink() + "\n";
+                    output = output + "Highest difficulty: " + difficulty + "\n\n";
+                    output = output + "Total songs found: " + (Integer.parseInt(line.split(" ")[3]) + 1) + "\n";
                     System.out.println(output);
-                }else if(!line.equals("")){
+                } else if (!line.equals("")) {
                     output = output + line + "\n";
                 }
 
-                if(line.split(" ")[0].equals("Link:")){
+                if (line.split(" ")[0].equals("Highest")) {
                     output = output + "\n";
                 }
 
 
             }
-            if(!alreadySolved && solved==true){
+            if (solved == true) {
 
                 outputStream = openFileOutput("solved.txt", Context.MODE_PRIVATE);
 
@@ -375,68 +401,68 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
             BufferedReader bufferedReader2 = new BufferedReader(isr2);
             alreadySolved = false;
 
-            if(solved==true) {
+            if (solved == true) {
                 while ((line = bufferedReader2.readLine()) != null) {
                     String arg = line.split(" ")[0];
                     String[] split = line.split(" ");
                     System.out.println(line);
-                    if(difficulty == 5 && arg.equals("Easiest")){
-                        for(int x = 0; x< split.length; x++){
-                            if(split[x].equals(selectedSong.getNumber().toString())){
-                                alreadySolved=true;
-                                break;
-                            }
-                        }
-                        if(!alreadySolved) {
-                            output = output + line + " " + selectedSong.getNumber() + "\n";
-                        }
-                    }else if(difficulty == 4 && arg.equals("Easy")){
-                        for(int x = 0; x< split.length; x++){
-                            if(split[x].equals(selectedSong.getNumber().toString())){
-                                alreadySolved=true;
-                                break;
-                            }
-                        }
-                        if(!alreadySolved) {
-                            output = output + line + " " + selectedSong.getNumber() + "\n";
-                        }
-                    }else if(difficulty == 3 && arg.equals("Medium")){
-                        for(int x = 0; x< split.length; x++){
-                            if(split[x].equals(selectedSong.getNumber().toString())){
-                                alreadySolved=true;
-                                break;
-                            }
-                        }
-                        if(!alreadySolved) {
-                            output = output +  line + " " + selectedSong.getNumber() + "\n";
-                        }
-                    }else if(difficulty == 2 && arg.equals("Hard")){
-                        for(int x = 0; x< split.length; x++){
-                            if(split[x].equals(selectedSong.getNumber().toString())){
-                                alreadySolved=true;
-                                break;
-                            }
-                        }
-                        if(!alreadySolved) {
-                            output = output + line + " " + selectedSong.getNumber() + "\n";
-                        }
-                    }else if(difficulty == 1 && arg.equals("Hardest")){
-                        System.out.println("hardest test");
-                        for(int x = 0; x< split.length; x++) {
+                    if (difficulty == 5 && arg.equals("Easiest")) {
+                        for (int x = 0; x < split.length; x++) {
                             if (split[x].equals(selectedSong.getNumber().toString())) {
                                 alreadySolved = true;
                                 break;
                             }
                         }
-                        if(!alreadySolved) {
+                        if (!alreadySolved) {
                             output = output + line + " " + selectedSong.getNumber() + "\n";
                         }
-                    }else{
+                    } else if (difficulty == 4 && arg.equals("Easy")) {
+                        for (int x = 0; x < split.length; x++) {
+                            if (split[x].equals(selectedSong.getNumber().toString())) {
+                                alreadySolved = true;
+                                break;
+                            }
+                        }
+                        if (!alreadySolved) {
+                            output = output + line + " " + selectedSong.getNumber() + "\n";
+                        }
+                    } else if (difficulty == 3 && arg.equals("Medium")) {
+                        for (int x = 0; x < split.length; x++) {
+                            if (split[x].equals(selectedSong.getNumber().toString())) {
+                                alreadySolved = true;
+                                break;
+                            }
+                        }
+                        if (!alreadySolved) {
+                            output = output + line + " " + selectedSong.getNumber() + "\n";
+                        }
+                    } else if (difficulty == 2 && arg.equals("Hard")) {
+                        for (int x = 0; x < split.length; x++) {
+                            if (split[x].equals(selectedSong.getNumber().toString())) {
+                                alreadySolved = true;
+                                break;
+                            }
+                        }
+                        if (!alreadySolved) {
+                            output = output + line + " " + selectedSong.getNumber() + "\n";
+                        }
+                    } else if (difficulty == 1 && arg.equals("Hardest")) {
+                        System.out.println("hardest test");
+                        for (int x = 0; x < split.length; x++) {
+                            if (split[x].equals(selectedSong.getNumber().toString())) {
+                                alreadySolved = true;
+                                break;
+                            }
+                        }
+                        if (!alreadySolved) {
+                            output = output + line + " " + selectedSong.getNumber() + "\n";
+                        }
+                    } else {
                         output = output + line + "\n";
                     }
 
                 }
-                if(!alreadySolved) {
+                if (!alreadySolved) {
                     outputStream = openFileOutput("solvedbydifficulty.txt", Context.MODE_PRIVATE);
 
                     System.out.println("solved numbers:\n" + output);
@@ -488,6 +514,12 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
     }
 
     @Override
+    public void onBackPressed() {
+        exitCheck();
+
+    }
+
+    @Override
     public void onConnected(Bundle connectionHint) {
         try {
             createLocationRequest();
@@ -500,6 +532,9 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
                 PackageManager.PERMISSION_GRANTED) {
             savedLatitude = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLatitude();
             savedLongitude = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLongitude();
+            LatLng latLng = new LatLng(savedLatitude, savedLongitude);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+            mMap.animateCamera(cameraUpdate);
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -530,7 +565,7 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
 
         distance = Math.pow(distance, 2);
         distance = Math.sqrt(distance);
-        distanceWalked+=distance;
+        distanceWalked += distance;
 
         for (int x = 0; x < placemarkCoordinates.size(); x++) {
             Log.d(TAG, "current placemark  " + placemarkCoordinates.get(x)[0] + " " + placemarkCoordinates.get(x)[1]);
@@ -551,16 +586,16 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
             distance = Math.pow(distance, 2);
             distance = Math.sqrt(distance);
             Log.d(TAG, "distance " + distance);
-            if(distance < 15){
+            if (distance < 25) {
                 String[] tempNames = placemarkNames.get(x).split(":");
                 int first = Integer.parseInt(tempNames[0]);
                 int second = Integer.parseInt(tempNames[1]);
                 Log.d(TAG, "first and second " + first + " " + second);
-                Log.d(TAG, "found word " + songLyrics.get(first-1)[second-1]);
+                Log.d(TAG, "found word " + songLyrics.get(first - 1)[second - 1]);
 
                 placemarksCollected++;
                 Log.d(TAG, "number of placemarks " + placemarksCollected);
-                collectedWords.add(songLyrics.get(first-1)[second-1]);
+                collectedWords.add(songLyrics.get(first - 1)[second - 1]);
 
                 placemarkCoordinates.remove(x);
                 placemarkNames.remove(x);
@@ -571,6 +606,16 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
             }
 
 
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        if(cameraTracking) {
+            savedLatitude = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLatitude();
+            savedLongitude = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLongitude();
+            LatLng latLng = new LatLng(savedLatitude, savedLongitude);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+            mMap.animateCamera(cameraUpdate);
         }
 
     }
@@ -588,7 +633,36 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
         System.out.println(" >>>> onConnectionFailed");
     }
 
+    public void exitCheck(){
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+        builder.setTitle("Return to Main Menu?")
+                .setMessage("Gameplay progress will not be saved! Would you like to return to the Main Menu?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switchMain();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        return;
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
     public void switchMain (){
+
         Intent intent = new Intent(this, MainActivity.class);
 
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -624,7 +698,7 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
         startActivity(intent);
     }
     public void switchHelp(){
-        Intent intent = new Intent (this, MapsHelp.class);
+        Intent intent = new Intent (this, HelpMaps.class);
 
         startActivity(intent);
     }
@@ -634,5 +708,21 @@ public class MapsActivity extends AppCompatActivity  implements OnMapReadyCallba
 
     public void guessSong(View view){
         switchGuess();
+    }
+    public void showTitle(){
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+        builder.setTitle(selectedSong.getTitle())
+                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+
+                .show();
     }
 }
