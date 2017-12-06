@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="fastadapter-extensions-expandable-3.0.3">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fastadapter-extensions-expandable-3.0.3.aar/f97dce3653d2e5018e7be78dd3fd3684/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fastadapter-extensions-expandable-3.0.3.aar/f97dce3653d2e5018e7be78dd3fd3684/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mikepenz/fastadapter-extensions-expandable/3.0.3/b7280b423264ac7ae1bdd35c55b70afa9db4d874/fastadapter-extensions-expandable-3.0.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

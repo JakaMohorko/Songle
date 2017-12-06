@@ -3,15 +3,15 @@ package com.example.s1552344.myapplication;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -91,12 +91,21 @@ public class DifficultySelect extends Activity {
             fis.close();
 
             if(alreadySolved.length == songList.size()+2){
-                new MaterialDialog.Builder(this)
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(this);
+                }
+                builder.setTitle("No songs left")
+                        .setMessage("All of the songs currently available have already been beaten at the selected difficulty level. Please pick a different difficulty.")
+                        .setPositiveButton("return", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
 
-                        .title("No songs left")
-                        .content("All of the songs currently available have already been beaten at the selected difficulty level. Please pick a different difficulty.")
-                        .positiveText("Return")
+                            }
+                        })
                         .show();
+
                 return;
             }
             if(alreadySolved.length>1){
