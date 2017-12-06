@@ -11,9 +11,11 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -60,6 +62,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleApiClient mGoogleApiClient;
     private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean cameraTracking = false;
+    private boolean firstPan = false;
 
 
     private static final String TAG = "MapsActivity";
@@ -142,7 +145,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             switchWords();
                         }
                         if (position == 5) {
-                            switchDiffSelect();
+                            difficultyCheck();
                         }
                         if (position == 7) {
                             exitCheck();
@@ -496,6 +499,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         addMarkers();
+
+
     }
 
 
@@ -530,11 +535,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
-            savedLatitude = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLatitude();
-            savedLongitude = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLongitude();
-            LatLng latLng = new LatLng(savedLatitude, savedLongitude);
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
-            mMap.animateCamera(cameraUpdate);
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -544,6 +544,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onLocationChanged(Location current) {
+
+        if(!firstPan) {
+            savedLatitude = current.getLatitude();
+            savedLongitude = current.getLongitude();
+            LatLng latLng = new LatLng(savedLatitude,savedLongitude);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+            mMap.animateCamera(cameraUpdate);
+            firstPan=true;
+        }
+
         System.out.println(
                 "[onLocationChanged] Lat / long now (" +
                         String.valueOf(current.getLatitude()) + "," +
@@ -566,6 +576,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         distance = Math.pow(distance, 2);
         distance = Math.sqrt(distance);
         distanceWalked += distance;
+
+        savedLatitude = current.getLatitude();
+        savedLongitude = current.getLongitude();
 
         for (int x = 0; x < placemarkCoordinates.size(); x++) {
             Log.d(TAG, "current placemark  " + placemarkCoordinates.get(x)[0] + " " + placemarkCoordinates.get(x)[1]);
@@ -611,12 +624,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             return;
         }
         if(cameraTracking) {
-            savedLatitude = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLatitude();
-            savedLongitude = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient).getLongitude();
-            LatLng latLng = new LatLng(savedLatitude, savedLongitude);
+            LatLng latLng = new LatLng(current.getLatitude(), current.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
             mMap.animateCamera(cameraUpdate);
         }
+
+
+
 
     }
 
@@ -678,6 +692,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    public void difficultyCheck(){
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+        builder.setTitle("Return to Difficulty Select?")
+                .setMessage("Gameplay progress will not be saved! Would you like to return to the Difficulty Selection Menu?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switchDiffSelect();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        return;
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
+    }
     public void switchDiffSelect(){
         Intent intent = new Intent (this, DifficultySelect.class);
 
@@ -724,5 +767,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 })
 
                 .show();
+    }
+    public static boolean isLocationEnabled(Context context) {
+        int locationMode = 0;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+        }else{
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+
+
     }
 }
