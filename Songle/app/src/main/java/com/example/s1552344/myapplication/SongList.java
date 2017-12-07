@@ -20,10 +20,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+/**
+ * Activity that displays the list of already completed songs
+ * in addition to some data on what the highest difficulty they were completed at
+ * and the users best completion time for the specific song.
+ */
+
 public class SongList extends AppCompatActivity {
 
+    //data containers to be displayed in the list view
     private ArrayList<String> songs = new ArrayList<>();
     private ArrayList<String> links = new ArrayList<>();
+
+    //my list view
     private ListView mListView;
 
     @Override
@@ -32,12 +41,12 @@ public class SongList extends AppCompatActivity {
 
         setContentView(R.layout.activity_song_list);
 
+        //Parse the solved.txt file which contains data on which songs have already been
+        //solved and what their highest difficulty and best time is
         FileInputStream fis = null;
         String output = "";
         try {
             fis = openFileInput("solved.txt");
-
-            int x = 1;
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(isr);
             String line;
@@ -74,18 +83,24 @@ public class SongList extends AppCompatActivity {
                     output = output + line + "\n";
                 }
             }
+            fis.close();
+            bufferedReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        //display the list view containing the song data using a custom adapter
         mListView = (ListView) findViewById(R.id.listViewSongs);
         System.out.println("adapter " + mListView);
 
         SongListAdapter adapter = new SongListAdapter(this, songs);
         mListView.setAdapter(adapter);
 
+        //on press of a song in the list, open a dialog asking the user whether they'd
+        //like to listen to the song on youtube. If so, either open up the youtube app if it's installed,
+        //or open the link in a browser.
         final Context context = this;
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -125,10 +140,12 @@ public class SongList extends AppCompatActivity {
 
         });
     }
+    //back button function
     public void back (View view){
         finish();
     }
 
+    //help button function
     public void switchHelp(View view){
         Intent intent = new Intent(this, HelpSongList.class);
 

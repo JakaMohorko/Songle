@@ -36,21 +36,19 @@ import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 
+/**
+ * Main menu activity of the app.
+ * The user can start a new game from this activity, as well
+ * as access various information activities (statistics, achievements...)
+ */
+
 public class MainActivity extends Activity {
 
+    //debug tag
     private static final String TAG = "Song list parse";
 
     //list of songs
-    private static ArrayList<Song> SongList = new ArrayList<>();
-
-    //Getters and Setters
-    public static ArrayList<Song> getSongList() {
-        return SongList;
-    }
-
-    public static void setSongList(ArrayList<Song> songList) {
-        SongList = songList;
-    }
+    private static ArrayList<Song> songList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,24 +61,21 @@ public class MainActivity extends Activity {
 
         Intent intent = getIntent();
         String songXML = (String) intent.getSerializableExtra("songXML");
+
+        //generate an array list of songs containing their data (artist, link, number, title)
         updateSongs(songXML);
     }
 
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        Window window = getWindow();
-        window.setFormat(PixelFormat.RGBA_8888);
-    }
 
+    //parse the SongList string and separate the data to be added
+    //into the songList array list
     public void updateSongs(String SongList) {
         try {
-
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
             XmlPullParser xpp = factory.newPullParser();
 
-            getSongList().clear();
+            songList.clear();
             xpp.setInput(new StringReader(SongList)); // pass input whatever xml you have
             int eventType = xpp.getEventType();
             String currentTag = "";
@@ -93,7 +88,7 @@ public class MainActivity extends Activity {
                     Log.d(TAG, "Start tag " + xpp.getName());
                     currentTag = xpp.getName();
                     if (xpp.getName().equals("Song")) {
-                        getSongList().add(new Song());
+                        songList.add(new Song());
                         songCounter++;
                     }
 
@@ -104,17 +99,17 @@ public class MainActivity extends Activity {
                     Log.d(TAG, "Text " + xpp.getText()); // here you get the text from xml
                     if (currentTag.equals("Number")) {
                         //Log.d(TAG, "Number " + xpp.getText());
-                        getSongList().get(songCounter).setNumber(xpp.getText());
-                        Log.d(TAG, "Number is " + getSongList().get(songCounter).getNumber());
+                        songList.get(songCounter).setNumber(xpp.getText());
+                        Log.d(TAG, "Number is " + songList.get(songCounter).getNumber());
                     }
                     if (currentTag.equals("Artist")) {
-                        getSongList().get(songCounter).setArtist(xpp.getText());
+                        songList.get(songCounter).setArtist(xpp.getText());
                     }
                     if (currentTag.equals("Title")) {
-                        getSongList().get(songCounter).setTitle(xpp.getText());
+                        songList.get(songCounter).setTitle(xpp.getText());
                     }
                     if (currentTag.equals("Link")) {
-                        getSongList().get(songCounter).setLink(xpp.getText());
+                        songList.get(songCounter).setLink(xpp.getText());
                     }
                 }
                 eventType = xpp.next();
@@ -130,41 +125,43 @@ public class MainActivity extends Activity {
 
     }
 
+    //switch to the DifficultySelect activity, passing along the song list
     public void switchActivity (View view){
         Intent intent = new Intent(this, DifficultySelect.class);
-        for(int x = 0; x < getSongList().size(); x++){
-            System.out.println("song number " + getSongList().get(x).getNumber());
+        for(int x = 0; x < songList.size(); x++){
+            System.out.println("song number " + songList.get(x).getNumber());
         }
 
-
-        intent.putExtra("songList", getSongList());
+        intent.putExtra("songList", songList);
 
         startActivity(intent);
     }
 
+    //on button press  functions
 
-
+    //switch to the GameplayStatistics activity
     public void switchStatistics (View view){
         Intent intent = new Intent(this, GameplayStatistics.class);
 
         startActivity(intent);
     }
+    //switch to the SongList activity
     public void switchSongs (View view){
         Intent intent = new Intent(this, SongList.class);
 
-
         startActivity(intent);
     }
+    //switch to the Achievements activity
     public void switchAchievements (View view){
         Intent intent = new Intent(this, Achievements.class);
 
         startActivity(intent);
     }
+    //quit the app
     public void exit (View view){
         finish();
-
     }
-
+    //switch to the Help Main activity
     public void switchHelp (View view){
         Intent intent = new Intent(this, HelpMain.class);
 

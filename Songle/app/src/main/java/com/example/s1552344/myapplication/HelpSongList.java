@@ -9,10 +9,12 @@ import android.view.Window;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
+/**
+ * Help display activity for SongList
+ */
 public class HelpSongList extends AppCompatActivity {
 
-    String help = "    - Here you can see the titles and artists of songs you've already completed, " +
+    private String help = "    - Here you can see the titles and artists of songs you've already completed, " +
             "along with the highest difficulty you've beaten them at and what your fastest time was.\n\n"+
             "    - Clicking on a song will enable you to listen to the song on Youtube. " +
             "You have to confirm your choice by pressing the Listen button when prompted.";
@@ -24,11 +26,12 @@ public class HelpSongList extends AppCompatActivity {
         setContentView(R.layout.activity_song_list_help);
 
 
-
+        //display help info stored in help
         TextView mytxt=(TextView ) findViewById(R.id.textView10);
         mytxt.setText(help);
         mytxt.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
+    //back button press function
     public void back (View view){
         finish();
     }

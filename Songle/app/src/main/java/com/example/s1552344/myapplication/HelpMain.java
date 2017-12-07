@@ -10,9 +10,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+/**
+ * Help display activity for DifficultySelect
+ */
 public class HelpMain extends AppCompatActivity {
 
-    String help = "    - Select Play to start a new game of a difficulty of choice.\n\n"+
+    private String help = "    - Select Play to start a new game of a difficulty of choice.\n\n"+
             "    - Select Song List to view the list of songs you've already encountered and beaten.\n\n"+
             "    - The achievements window will show you your progress towards the achievements available in the game.\n\n"+
             "    - Select Statistics to view data about your gameplay sessions.\n\n"+
@@ -25,11 +28,12 @@ public class HelpMain extends AppCompatActivity {
         setContentView(R.layout.activity_help_main);
 
 
-
+        //display help info stored in help
         TextView mytxt=(TextView ) findViewById(R.id.textView4);
         mytxt.setText(help);
         mytxt.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
+    //back button press function
     public void back (View view){
         finish();
     }

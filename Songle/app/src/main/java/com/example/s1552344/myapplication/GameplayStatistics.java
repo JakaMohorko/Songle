@@ -16,6 +16,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+/**
+ * Activity where data is parsed and some gameplay statistics are
+ * displayed to the user
+ */
+
 public class GameplayStatistics extends AppCompatActivity {
 
     private ListView mListView;
@@ -26,6 +31,8 @@ public class GameplayStatistics extends AppCompatActivity {
 
         setContentView(R.layout.activity_gameplay_statistics);
 
+        //parse the data file and store all the statistics with
+        //their descriptions and progress indicators into a list
         FileInputStream fis = null;
         ArrayList<Statistic> statistics = new ArrayList<>();
         try {
@@ -39,58 +46,58 @@ public class GameplayStatistics extends AppCompatActivity {
                 String arg = line.split(" ")[0];
                 int val = Integer.parseInt(line.split(" ")[1]);
 
-                if(arg.equals("DistanceWalked")){
+                if (arg.equals("DistanceWalked")) {
                     statistics.add(new Statistic("Distance walked:", val));
                 }
-                if(arg.equals("TotalSolved")){
+                if (arg.equals("TotalSolved")) {
                     statistics.add(new Statistic("Number of puzzles solved:", val));
                 }
-                if(arg.equals("EasiestSolved")){
+                if (arg.equals("EasiestSolved")) {
                     statistics.add(new Statistic("Number of Easiest difficulty puzzles solved:", val));
                 }
-                if(arg.equals("EasySolved")){
+                if (arg.equals("EasySolved")) {
                     statistics.add(new Statistic("Number of Easy difficulty  puzzles solved:", val));
                 }
-                if(arg.equals("MediumSolved")){
+                if (arg.equals("MediumSolved")) {
                     statistics.add(new Statistic("Number of Medium difficulty puzzles solved:", val));
                 }
-                if(arg.equals("HardSolved")){
+                if (arg.equals("HardSolved")) {
                     statistics.add(new Statistic("Number of Hard difficulty puzzles solved:", val));
                 }
-                if(arg.equals("HardestSolved")){
+                if (arg.equals("HardestSolved")) {
                     statistics.add(new Statistic("Number of Hardest difficulty puzzles solved:", val));
                 }
-                if(arg.equals("FastestTimeEasiest")){
+                if (arg.equals("FastestTimeEasiest")) {
                     statistics.add(new Statistic("Fastest time to solve a Easiest difficulty puzzle:", val));
                 }
-                if(arg.equals("FastestTimeEasy")){
+                if (arg.equals("FastestTimeEasy")) {
                     statistics.add(new Statistic("Fastest time to solve a Easy difficulty puzzle:", val));
                 }
-                if(arg.equals("FastestTimeMedium")){
+                if (arg.equals("FastestTimeMedium")) {
                     statistics.add(new Statistic("Fastest time to solve a Medium difficulty puzzle:", val));
                 }
-                if(arg.equals("FastestTimeHard")){
+                if (arg.equals("FastestTimeHard")) {
                     statistics.add(new Statistic("Fastest time to solve a Hard difficulty puzzle:", val));
                 }
-                if(arg.equals("FastestTimeHardest")){
+                if (arg.equals("FastestTimeHardest")) {
                     statistics.add(new Statistic("Fastest time to solve a Hardest difficulty puzzle:", val));
                 }
-                if(arg.equals("PlacemarksCollected")){
+                if (arg.equals("PlacemarksCollected")) {
                     statistics.add(new Statistic("Placemarks collected:", val));
                 }
-                if(arg.equals("AverageTimeEasiest")){
+                if (arg.equals("AverageTimeEasiest")) {
                     statistics.add(new Statistic("Average time to solve a Easiest difficulty puzzle:", val));
                 }
-                if(arg.equals("AverageTimeEasy")){
+                if (arg.equals("AverageTimeEasy")) {
                     statistics.add(new Statistic("Average time to solve a Easy difficulty puzzle:", val));
                 }
-                if(arg.equals("AverageTimeMedium")){
+                if (arg.equals("AverageTimeMedium")) {
                     statistics.add(new Statistic("Average time to solve a Medium difficulty puzzle:", val));
                 }
-                if(arg.equals("AverageTimeHard")){
+                if (arg.equals("AverageTimeHard")) {
                     statistics.add(new Statistic("Average time to solve a Hard difficulty puzzle:", val));
                 }
-                if(arg.equals("AverageTimeHardest")){
+                if (arg.equals("AverageTimeHardest")) {
                     statistics.add(new Statistic("Average time to solve a Hardest difficulty puzzle:", val));
                 }
 
@@ -101,6 +108,7 @@ public class GameplayStatistics extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //Populate the list view using a custon list view adapter
         mListView = (ListView) findViewById(R.id.listViewStats);
         System.out.println("adapter " + mListView);
 
@@ -108,6 +116,7 @@ public class GameplayStatistics extends AppCompatActivity {
         mListView.setAdapter(adapter);
 
     }
+    //back button press function
     public void back (View view){
         finish();
     }

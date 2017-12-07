@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 
 /**
- * Created by Jaka on 25/10/2017.
+ * Class for song data.
+ * objects of type Song get a title, artist, number and link assigned to them.
  */
 
 public class Song implements Serializable {

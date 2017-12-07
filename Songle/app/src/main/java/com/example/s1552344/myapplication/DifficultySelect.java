@@ -21,12 +21,24 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Difficulty select acitivity. User can choose a difficulty.
+ * Upon choosing, a song which hasn't yet been solved at the chosen difficulty
+ * is chosen and passed to the next activity.
+ */
+
 public class DifficultySelect extends Activity {
 
-    Song selectedSong;
+
+
+    //debug tag
     private static final String TAG = "Difficulty Select";
+
+    //variables obtained from previous activity
+    private ArrayList<Song> songList;
+
+    //variables to be passed onwards
     private String difficulty = "";
-    ArrayList<Song> songList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +47,11 @@ public class DifficultySelect extends Activity {
         setContentView(R.layout.activity_difficulty_select);
         Intent intent = getIntent();
 
+        //obtain the song list from MainActivity or MapsActivity
         songList = (ArrayList<Song>) intent.getSerializableExtra("songList");
     }
 
+    //Select difficulty and switch activities depending on which button is pressed
     public void easiest(View view){
         difficulty = "5";
         switchActivity(view);
@@ -64,6 +78,9 @@ public class DifficultySelect extends Activity {
         String line;
         FileInputStream fis = null;
         try {
+
+            //parse the file where songs already solved are stored according to difficulty
+            //and save the numebers of songs already solved at the chosen difficulty into an array.
             fis = openFileInput("solvedbydifficulty.txt");
             InputStreamReader isr2 = new InputStreamReader(fis);
             BufferedReader bufferedReader2 = new BufferedReader(isr2);
@@ -75,7 +92,6 @@ public class DifficultySelect extends Activity {
                 System.out.println(line);
                 if (difficulty.equals("5") && arg.equals("Easiest")) {
                     alreadySolved = line.split(" ");
-                    System.out.println("easiest check");
                 } else if (difficulty.equals("4") && arg.equals("Easy")) {
                     alreadySolved = line.split(" ");
                 } else if (difficulty.equals("3") && arg.equals("Medium")) {
@@ -90,6 +106,8 @@ public class DifficultySelect extends Activity {
             bufferedReader2.close();
             fis.close();
 
+            //if no songs are unsolved at the chosen difficulty, ask the user to pick
+            //a different difficulty
             if(alreadySolved.length == songList.size()+2){
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -108,19 +126,21 @@ public class DifficultySelect extends Activity {
 
                 return;
             }
+            //if any song has already been solved at the chosen difficulty, select a random
+            //unsolved song
             if(alreadySolved.length>1){
                 boolean newSong = false;
                 System.out.println("find new song");
                 Random generator = new Random();
                 String cur = "";
+                //generate a random number from 1 to the size of the song list
                 int x = generator.nextInt(songList.size() - 1);
-                if(x==0){
-                    x++;
-                }
+                x++;
                 while(true) {
 
                     for(int y = 1; y < alreadySolved.length;y++){
 
+                        //append a 0 to the chosen number if x<10. Song numbers are stored as 01,02,03...
                         if(x<10){
                             cur = "0" + Integer.toString(x);
 
@@ -128,6 +148,7 @@ public class DifficultySelect extends Activity {
                             cur = Integer.toString(x);
                         }
                         System.out.println("trying number " + cur + " " + alreadySolved[y]);
+                        //keep incrementing x by one until an unsolved song is found
                         if (alreadySolved[y].equals(cur)){
                             if(x == songList.size()){
                                 x=1;
@@ -147,11 +168,14 @@ public class DifficultySelect extends Activity {
                     }
                 }
             }else {
+                //pick a random song if no songs have been solved yet at the chosen difficulty
                 System.out.println("random");
                 Random generator = new Random();
                 int x = generator.nextInt(songList.size() - 1);
                 intent.putExtra("song", songList.get(x));
             }
+
+            //switch to LoadMap activity
             intent.putExtra("difficulty", difficulty);
             intent.putExtra("songList", songList);
             Log.d(TAG, "Difficulty " + difficulty);
@@ -163,6 +187,8 @@ public class DifficultySelect extends Activity {
             e.printStackTrace();
         }
     }
+
+    //button press actions
     public void switchHelp (View view){
         Intent intent = new Intent(this, HelpDifficulty.class);
 

@@ -9,10 +9,12 @@ import android.view.Window;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
+/**
+ * Help display activity for DifficultySelect
+ */
 public class HelpDifficulty extends AppCompatActivity {
 
-    String help = "    Easiest: All of the lyrics of a song can be collected and are classified with markers 1, 2, 3 and 4.\n\n"+
+    private String help = "    Easiest: All of the lyrics of a song can be collected and are classified with markers 1, 2, 3 and 4.\n\n"+
             "    Easy: All of the lyrics of a song can be collected and are classified with markers 2, 3 and 4\n\n"+
             "    Normal: 75% of the lyrics of a song can be collected and are classified with markers 2, 3 and 4\n\n"+
             "    Hard: 50% of the lyrics of a song can be collected and are classified with markers 3 and 4\n\n"+
@@ -31,11 +33,12 @@ public class HelpDifficulty extends AppCompatActivity {
         setContentView(R.layout.activity_help_difficulty);
 
 
-
+        //display the help info stored in help
         TextView mytxt=(TextView ) findViewById(R.id.textView3);
         mytxt.setText(help);
         mytxt.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
+    //back button press function
     public void back (View view){
         finish();
     }

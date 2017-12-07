@@ -24,39 +24,50 @@ import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 
+/**
+ * initial activity which downloads the song list and
+ * initializes necessary storage files if they do not yet exist
+ */
+
 public class LoadSongList extends Activity {
 
-    String songXML = "";
+    //list data storage
+    private String songXML = "";
+
+    //debug tag
     private final String TAG = "LoadSongList";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_load_song_list);
         AsyncHttpClient client = new AsyncHttpClient();
+
+        //Download the song list
         client.get("http://www.inf.ed.ac.uk/teaching/courses/selp/data/songs/songs.txt", new
-                TextHttpResponseHandler() {
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        downloadFail();
-
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        songXML = responseString;
-                        switchActivity();
-                    }
+            TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    downloadFail();
                 }
-
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    songXML = responseString;
+                    switchActivity();
+                }
+            }
         );
-
     }
+
+    //when download finishes, switch to main and initialize data.txt,
+    //solved.txt and solvedbydifficulty.txt if they don't exist yet
     public void switchActivity () {
 
         System.out.println("switching to main");
         File file = getBaseContext().getFileStreamPath("data.txt");
 
+        //initialize data.txt with default values
         if (!file.exists()) {
             String filename = "data.txt";
             String string = "DistanceWalked 0\n" +
@@ -91,6 +102,7 @@ public class LoadSongList extends Activity {
             System.out.println("switching to main1");
             File file1 = getBaseContext().getFileStreamPath("solved.txt");
 
+            //initialize solved.txt with default values
             if(!file1.exists()) {
                 String filename1 = "solved.txt";
                 String string1 = "Total songs found: 0";
@@ -106,6 +118,7 @@ public class LoadSongList extends Activity {
             }
         File file2 = getBaseContext().getFileStreamPath("solvedbydifficulty.txt");
 
+        //initialize solvedbydifficulty.txt with default values
         if(!file2.exists()) {
             String filename2 = "solvedbydifficulty.txt";
             String string2 = "Easiest \n" +
@@ -128,12 +141,14 @@ public class LoadSongList extends Activity {
             System.out.println("switching to main2");
             Intent intent = new Intent(this, MainActivity.class);
 
+            //switch to MainActivity
             intent.putExtra("songXML", songXML);
             Log.d(TAG, "Song XML loaded");
             startActivity(intent);
             finish();
         }
 
+        //if download fails, prompt the user to either retry download or exit the app
         public void downloadFail(){
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

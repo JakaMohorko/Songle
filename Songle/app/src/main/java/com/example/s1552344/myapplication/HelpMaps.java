@@ -9,10 +9,12 @@ import android.view.Window;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
+/**
+ * Help display activity for MapsActivity
+ */
 public class HelpMaps extends AppCompatActivity {
 
-    String help = "   - Move within 25 meters of a marker to \"collect\" it.\n\n"+
+    private String help = "   - Move within 25 meters of a marker to \"collect\" it.\n\n"+
             "    - You can view the words you've collected through the side menu button View Words.\n\n"+
             "    - Press Guess Song to enter the song guessing menu. There you have to enter the title of the Song of which the" +
             "lyrics are scattered around the map.\n\n"+
@@ -26,11 +28,12 @@ public class HelpMaps extends AppCompatActivity {
         setContentView(R.layout.activity_maps_help);
 
 
-
+        //display help info stored in help
         TextView mytxt=(TextView ) findViewById(R.id.textView5);
         mytxt.setText(help);
         mytxt.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
+    //back button press function
     public void back (View view){
         finish();
     }

@@ -12,6 +12,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+/**
+ * Activity where progress on achievements is parsed and displayed
+ */
+
 public class Achievements extends AppCompatActivity {
 
     private ArrayList<Achievement> achievsList = new ArrayList<>();
@@ -21,6 +25,7 @@ public class Achievements extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Initialize achievemtn descriptions and their progress to the default value
         setContentView(R.layout.activity_achievements);
         String[] achievs = {
                     "Collect 100 placemarks",
@@ -47,6 +52,8 @@ public class Achievements extends AppCompatActivity {
         String[] progress = {
                 "0/100","0/500","0/1000","0/5000","0/5","0/10","0/50","0/1","0/10","0/20","0/1","0/1","0/1"
         };
+
+        //Parse the data.txt file and update achievement progress accordingly
         FileInputStream fis = null;
         try {
             fis = openFileInput("data.txt");
@@ -202,6 +209,8 @@ public class Achievements extends AppCompatActivity {
 
 
             }
+            fis.close();
+            bufferedReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -209,20 +218,20 @@ public class Achievements extends AppCompatActivity {
         }
 
 
+        //Create achhievement objects and add them to a list for the ListView creation
         for(int x = 0; x < 13; x++){
             achievsList.add(new Achievement(achievs[x],progress[x],obtained[x]));
         }
 
 
+        //Feed achievements int a custom List View Adapter to display them on
+        //the screen
         mListView = (ListView) findViewById(R.id.listViewAchievs);
         System.out.println("adapter " + mListView);
 
         AchievementsListAdapter adapter = new AchievementsListAdapter(this, achievsList);
         mListView.setAdapter(adapter);
 
-        //TextView mytxt=(TextView ) findViewById(R.id.textView);
-        //mytxt.setText(achievements);
-        //mytxt.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
     public void back (View view){
         finish();

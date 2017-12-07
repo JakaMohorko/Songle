@@ -53,6 +53,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+/**
+ * Main gameplay activity.
+ * Here the user can collect placemarks and finally guess which song is being played.
+ */
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -64,7 +68,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean cameraTracking = false;
     private boolean firstPan = false;
 
-
+    //debug tag
     private static final String TAG = "MapsActivity";
 
     //song data
@@ -79,7 +83,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private long timeSpent = 0;
     private int placemarksCollected = 0;
     private long startTime = 0;
-    private String difficultyName = "";
 
     //placemark data
     private ArrayList<double[]> placemarkCoordinates;
@@ -103,7 +106,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     SecondaryDrawerItem item5 = new SecondaryDrawerItem().withIdentifier(5).withName("Help").withSelectable(false);
     SecondaryDrawerItem item6 = new SecondaryDrawerItem().withIdentifier(6).withName("Enable Camera Tracking");
     SecondaryDrawerItem item7 = new SecondaryDrawerItem().withIdentifier(7).withName("Disable Camera Tracking").withSetSelected(true);
-    SecondaryDrawerItem item8 = new SecondaryDrawerItem().withIdentifier(8).withName("Current song title").withSetSelected(true);
+    //item8 - cheat item, used for debugging
+    //SecondaryDrawerItem item8 = new SecondaryDrawerItem().withIdentifier(8).withName("Current song title").withSetSelected(true);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,7 +115,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_maps);
 
-
+        //Create side navigation drawer
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withTranslucentStatusBar(true)
@@ -130,9 +134,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         new DividerDrawerItem(),
                         item6,
                         item7,
-                        new DividerDrawerItem(),
-                        item8,
                         new DividerDrawerItem()
+                       // item8,
+                        //new DividerDrawerItem()
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -159,15 +163,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if(position == 12){
                             cameraTracking=false;
                         }
-                        if(position == 14){
+                       /* if(position == 14){
                             showTitle();
-                        }
+                        }*/
                         return true;
                     }
                 })
                 .build();
 
-
+        //set none of the buttons as selected
         result.setSelection(999);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -184,27 +188,70 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .build();
         }
 
-
+        //log starting time of the play session
         startTime = System.currentTimeMillis();
 
         Intent intent = getIntent();
-
+        //obtained all extras passed from previous activities
         selectedSong = (Song) intent.getSerializableExtra("selectedSong");
         difficulty = Integer.parseInt((String) intent.getSerializableExtra("difficulty"));
-        Log.d(TAG, "selected song" + selectedSong.getNumber());
         songLyrics = (ArrayList<String[]>) intent.getSerializableExtra("songLyrics");
-        Log.d(TAG, "Lyrics" + songLyrics);
         placemarkCoordinates = (ArrayList<double[]>) intent.getSerializableExtra("placemarkCoordinates");
         placemarkNames = (ArrayList<String>) intent.getSerializableExtra("placemarkNames");
         placemarkStyles = (ArrayList<String>) intent.getSerializableExtra("placemarkStyles");
         markerIcons = (HashMap<String, Bitmap>) intent.getSerializableExtra("placemarkIcons");
         songList = (ArrayList<Song>) intent.getSerializableExtra("songList");
 
+        Log.d(TAG, "Lyrics" + songLyrics);
+        Log.d(TAG, "selected song" + selectedSong.getNumber());
 
+        //ask the user to turn on location, if it is off and return to main menu
+        final Context context = this;
+        if(!isLocationEnabled(this)){
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(this);
+            }
+            builder.setTitle("Location disabled")
+                    .setMessage("Please turn Location on and start a new game.")
+                    .setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            switchMain();
+                        }
+                    })
+                    .setNegativeButton("Location Settings", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            context.startActivity(myIntent);
+                            finish();
+                        }
+                    })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            switchMain();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+
+        //Make sure that the current state of the song being played is marked as unsolved
+        //in shared preferences
+        SharedPreferences settings = getSharedPreferences("prefsFile", 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("solved", false);
+        editor.commit();
+
+        //add markers to the map
         addMarkers();
 
     }
 
+    //adds markers at the coordinates obtained from MapDownload with correct styles,
+    //if both the map has been created and markerIcons initialized
     public void addMarkers() {
         Log.d(TAG, "adding markers 1 " + markerIcons);
         if (mMap != null && markerIcons != null) {
@@ -220,12 +267,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    //connect the google api client
     @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
     }
 
+    //on stop disconnect the api client
     @Override
     protected void onStop() {
         super.onStop();
@@ -239,18 +288,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onDestroy() {
         super.onDestroy();
 
+
         FileInputStream fis = null;
         timeSpent = (System.currentTimeMillis() - startTime) / 1000;
         Log.d(TAG, "editing data");
         try {
+
+            //when the user returns to the main menu, or finishes a song, update all the data
+            //files stored on the device
             fis = openFileInput("data.txt");
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(isr);
+
             String line;
             String output = "";
+
+            //check whether the song has been completed when on destroy was called.
             SharedPreferences settings = getSharedPreferences("prefsFile", 0);
             boolean solved = settings.getBoolean("solved", false);
+
             int difSolved = 0;
+
+            //update statistic data with information collected during the play session.
+            //update certain statistics only if the puzzle was solved.
             while ((line = bufferedReader.readLine()) != null) {
                 String arg = line.split(" ")[0];
                 int val = Integer.parseInt(line.split(" ")[1]);
@@ -332,6 +392,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
 
+            //write the changed data to tata.txt
             System.out.println(output);
             String filename = "data.txt";
 
@@ -341,6 +402,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             outputStream.write(output.getBytes());
             outputStream.close();
 
+            //read and update the solved song data file if the currently played song was completed
             boolean alreadySolved = false;
             output = "";
             fis = openFileInput("solved.txt");
@@ -349,10 +411,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             while ((line = bufferedReader1.readLine()) != null) {
                 System.out.println("current line: " + line);
+
+                //if the currently played song has been solved, update the data on it
                 if (("Title: " + selectedSong.getTitle()).equals(line)) {
                     System.out.println("Song already in list" + selectedSong.getTitle());
                     alreadySolved = true;
                     output = output + line + "\n";
+
+                    //read and adjust Best Time line
                     line = bufferedReader1.readLine();
                     int val = Integer.parseInt(line.split(" ")[2]);
                     if (timeSpent < val) {
@@ -360,8 +426,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     } else {
                         output = output + line + "\n";
                     }
+
+                    //read and write the link line
                     line = bufferedReader1.readLine();
                     output = output + line + "\n";
+
+                    //read and adjust the Highest difficulty line
                     line = bufferedReader1.readLine();
                     val = Integer.parseInt(line.split(" ")[2]);
                     if (val > difficulty) {
@@ -371,6 +441,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     }
                 } else if (line.split(" ")[0].equals("Total") && !alreadySolved) {
+                    //if the song hasn't been completed yet and we're at the last line,
+                    //add the song data to the file
                     output = output + "Artist: " + selectedSong.getArtist() + "\n";
                     output = output + "Title: " + selectedSong.getTitle() + "\n";
                     output = output + "Best time: " + timeSpent + "\n";
@@ -389,7 +461,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
             if (solved == true) {
-
+                //if the currently played song was completed, update the solved song data file
                 outputStream = openFileOutput("solved.txt", Context.MODE_PRIVATE);
 
                 System.out.println("song list:\n" + output);
@@ -398,6 +470,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 outputStream.close();
             }
 
+            //read and update the already solved songs listed by difficulty data file,
+            //if the song currently being played has been completed.
             output = "";
             fis = openFileInput("solvedbydifficulty.txt");
             InputStreamReader isr2 = new InputStreamReader(fis);
@@ -409,6 +483,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     String arg = line.split(" ")[0];
                     String[] split = line.split(" ");
                     System.out.println(line);
+                    //for each difficulty, check the difficulty of the song currently being played.
+                    //if it matches, check if the song was already completed at that difficulty.
+                    //if not, add its number to that difficulty category
                     if (difficulty == 5 && arg.equals("Easiest")) {
                         for (int x = 0; x < split.length; x++) {
                             if (split[x].equals(selectedSong.getNumber().toString())) {
@@ -463,9 +540,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     } else {
                         output = output + line + "\n";
                     }
-
                 }
+
                 if (!alreadySolved) {
+                    //if the song currently being played hasn't been solved yet, udpate solvedbydifficulty.txt
                     outputStream = openFileOutput("solvedbydifficulty.txt", Context.MODE_PRIVATE);
 
                     System.out.println("solved numbers:\n" + output);
@@ -475,11 +553,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
 
             }
+            //set the solved variable in SharedPreferences back to false for the next song.
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("solved", false);
             editor.commit();
 
 
+            fis.close();
+            bufferedReader.close();
+            bufferedReader1.close();
+            bufferedReader2.close();
+            outputStream.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -490,6 +574,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        //on map ready, enable your location and location button and add markers to the map
         mMap = googleMap;
 
         try {
@@ -507,7 +592,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void createLocationRequest() {
         // Set the parameters for the location request
         LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(5000); // preferably every 5 seconds
+        mLocationRequest.setInterval(3000); // preferably every 3 seconds
         mLocationRequest.setFastestInterval(1000); // at most every second
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         // Can we access the user’s current location?
@@ -520,8 +605,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onBackPressed() {
+        //check if the user wants to return to the main menu
         exitCheck();
-
     }
 
     @Override

@@ -40,19 +40,25 @@ import cz.msebera.android.httpclient.Header;
 
 public class LoadMap extends Activity {
 
-
+    //debug tag
     private static final String TAG = "Load Map";
-    String kmlMap = "";
-    Song selectedSong;
-    String songLyrics = "";
-    ArrayList<double[]> coordinates = new ArrayList<>();
-    ArrayList<String> names = new ArrayList<>();
-    ArrayList<String> styles = new ArrayList<>();
-    ConcurrentHashMap<String, Bitmap> icons = new ConcurrentHashMap<>();
-    ArrayList<String[]> parsedLyrics = new ArrayList<>();
-    ArrayList<Song> songList;
-    String difficulty;
-    volatile boolean dialogCreated = false;
+
+    //variables to be parsed
+    private String kmlMap = "";
+    private String songLyrics = "";
+
+    //storage variables to be sent to MapsActivity
+    private Song selectedSong;
+    private  ArrayList<double[]> coordinates = new ArrayList<>();
+    private ArrayList<String> names = new ArrayList<>();
+    private ArrayList<String> styles = new ArrayList<>();
+    private ConcurrentHashMap<String, Bitmap> icons = new ConcurrentHashMap<>();
+    private ArrayList<String[]> parsedLyrics = new ArrayList<>();
+    private ArrayList<Song> songList;
+    private String difficulty;
+
+    //check if dialog has been created
+    private volatile boolean dialogCreated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,162 +67,151 @@ public class LoadMap extends Activity {
         setContentView(R.layout.activity_load_map);
         Intent intent = getIntent();
         AsyncHttpClient client = new AsyncHttpClient();
+
+        //get data from DifficultySelect
         selectedSong = (Song)(intent.getSerializableExtra("song"));
         songList = (ArrayList<Song>) intent.getSerializableExtra("songList");
         difficulty = (String) intent.getSerializableExtra("difficulty");
+
+        //download map info
         String url = "http://www.inf.ed.ac.uk/teaching/courses/selp/data/songs/" + selectedSong.getNumber() + "/map" +
                 intent.getSerializableExtra("difficulty") + ".kml";
         Log.d(TAG, url);
-
         client.get(url, new
-
-                TextHttpResponseHandler() {
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        Log.d(TAG, "DL failure");
-                        if(!dialogCreated) {
-                            dialogCreated=true;
-                            downloadFail();
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                        kmlMap = responseString;
-                        Log.d(TAG, "DL success");
-                        switchActivity();
-
+            TextHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    kmlMap = responseString;
+                    switchActivity();
+                }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Log.d(TAG, "DL failure");
+                    if(!dialogCreated) {
+                        dialogCreated=true;
+                        downloadFail();
                     }
                 }
+            }
         );
-
+        //download lyric info
         url = "http://www.inf.ed.ac.uk/teaching/courses/selp/data/songs/" + selectedSong.getNumber() + "/words.txt";
         System.out.println(url);
         client.get(url, new
-
-                TextHttpResponseHandler() {
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        Log.d(TAG, "DL failure");
-                        if(!dialogCreated) {
-                            dialogCreated=true;
-                            downloadFail();
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        Log.d(TAG, "DL success" );
-                        songLyrics = responseString;
-                            switchActivity();
-
+            TextHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    Log.d(TAG, "DL success" );
+                    songLyrics = responseString;
+                    switchActivity();
+                }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Log.d(TAG, "DL failure");
+                    if(!dialogCreated) {
+                        //if download fails, if no dialog has been displayed yet, call downloadFail
+                        dialogCreated=true;
+                        downloadFail();
                     }
                 }
+            }
         );
-
+        //download icon for very interesting words
         url = "http://maps.google.com/mapfiles/kml/paddle/red-stars.png";
         client.get(url, new
-
-                AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                        icons.put("veryinteresting", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
-                        switchActivity();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        if(!dialogCreated) {
-                            dialogCreated=true;
-                            downloadFail();
-                        }
+            AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    icons.put("veryinteresting", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
+                    switchActivity();
+                }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    if(!dialogCreated) {
+                        //if download fails, if no dialog has been displayed yet, call downloadFail
+                        dialogCreated=true;
+                        downloadFail();
                     }
                 }
+            }
         );
-
+        //download icon for interesting words
         url = "http://maps.google.com/mapfiles/kml/paddle/orange-diamond.png";
         client.get(url, new
-
-                AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                        icons.put("interesting", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
-                        switchActivity();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        if(!dialogCreated) {
-                            dialogCreated=true;
-                            downloadFail();
-                        }
-
+            AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    icons.put("interesting", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
+                    switchActivity();
+                }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    if(!dialogCreated) {
+                        //if download fails, if no dialog has been displayed yet, call downloadFail
+                        dialogCreated=true;
+                        downloadFail();
                     }
                 }
+            }
         );
+        //download icon for not boring words
         url = "http://maps.google.com/mapfiles/kml/paddle/ylw-circle.png";
         client.get(url, new
+            AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    icons.put("notboring", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
+                    switchActivity();
+                }
 
-                AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                        icons.put("notboring", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
-                        switchActivity();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-                        if(!dialogCreated) {
-                            dialogCreated=true;
-                            downloadFail();
-                        }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    if(!dialogCreated) {
+                        //if download fails, if no dialog has been displayed yet, call downloadFail
+                        dialogCreated=true;
+                        downloadFail();
                     }
                 }
+            }
         );
+        //download icon for boring words
         url = "http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png";
         client.get(url, new
-
-                AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                        icons.put("boring", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
-                        switchActivity();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        if(!dialogCreated) {
-                            dialogCreated=true;
-                            downloadFail();
-                        }
+            AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    icons.put("boring", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
+                    switchActivity();
+                }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    if(!dialogCreated) {
+                        //if download fails, if no dialog has been displayed yet, call downloadFail
+                        dialogCreated=true;
+                        downloadFail();
                     }
                 }
+            }
         );
+        //download icon for unclassified words
         url = "http://maps.google.com/mapfiles/kml/paddle/wht-blank.png";
         client.get(url, new
+            AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    icons.put("unclassified", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
+                    switchActivity();
+                }
 
-                AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                        icons.put("unclassified", BitmapFactory.decodeByteArray(responseBody,0,responseBody.length));
-                        switchActivity();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        if(!dialogCreated) {
-                            dialogCreated=true;
-                            downloadFail();
-                        }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    if(!dialogCreated) {
+                        //if download fails, if no dialog has been displayed yet, call downloadFail
+                        dialogCreated=true;
+                        downloadFail();
                     }
                 }
+            }
         );
 
     }
@@ -225,8 +220,11 @@ public class LoadMap extends Activity {
         Log.d(TAG, "no of icons: " + icons.size());
         if(kmlMap != "" && songLyrics != "" && icons.size()==5) {
 
+            //parse the coordinates of the placemarks downloaded and save them
             getCoordinates();
+            //parse the lyrics of the song downloaded and save them
             parseLyrics();
+
             Intent intent = new Intent(this, MapsActivity.class);
 
             for (int x = 0; x < coordinates.size(); x++) {
@@ -239,6 +237,7 @@ public class LoadMap extends Activity {
             Log.d(TAG, "name list: " + names);
             Log.d(TAG, "coordinate list: " + coordinates);
 
+            //send data to MapsActivity
             intent.putExtra("placemarkIcons", icons);
             intent.putExtra("placemarkStyles", styles);
             intent.putExtra("placemarkNames", names);
@@ -247,12 +246,14 @@ public class LoadMap extends Activity {
             intent.putExtra("songLyrics", parsedLyrics);
             intent.putExtra("songList",  songList);
             intent.putExtra("difficulty", difficulty);
+
             Log.d(TAG, "Map loaded");
             startActivity(intent);
             finish();
         }
     }
 
+    //parses the lyrics and stores separate words in a list
     public void parseLyrics(){
         String lines[] = songLyrics.split("\\r?\\n");
         for (int x = 0; x < lines.length;x++){
@@ -265,6 +266,8 @@ public class LoadMap extends Activity {
 
     }
 
+    //parses the map data and stores the coordinates of markers to be placed on the map
+    //in addition to the styles of the markers
     public void getCoordinates(){
         try {
 
@@ -272,7 +275,7 @@ public class LoadMap extends Activity {
             factory.setNamespaceAware(true);
             XmlPullParser xpp = factory.newPullParser();
 
-            xpp.setInput(new StringReader(kmlMap)); // pass input whatever xml you have
+            xpp.setInput(new StringReader(kmlMap));
             int eventType = xpp.getEventType();
             String currentTag = "";
 
@@ -286,7 +289,7 @@ public class LoadMap extends Activity {
                     Log.d(TAG, "End tag " + xpp.getName());
                     currentTag = "";
                 } else if (eventType == XmlPullParser.TEXT) {
-                    Log.d(TAG, "Text " + xpp.getText()); // here you get the text from xml
+                    Log.d(TAG, "Text " + xpp.getText());
                     if(currentTag.equals("name")){
                         names.add(new String(xpp.getText()));
                     }
@@ -309,6 +312,8 @@ public class LoadMap extends Activity {
         }
 
     }
+
+    //display a dialog asking the user to retry download or return to main menu if download fails
     public void downloadFail() {
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -336,6 +341,5 @@ public class LoadMap extends Activity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
-
     }
 }
