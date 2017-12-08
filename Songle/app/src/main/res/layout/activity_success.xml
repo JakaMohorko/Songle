@@ -8,13 +8,29 @@
     tools:context="com.example.s1552344.myapplication.Success">
 
     <TextView
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Success!"
+        android:textColor="#FFFFFF"
+        android:textSize="40dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/textView7"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="200dp"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="100dp"
         android:scrollbars="vertical"
         android:text="abc"
         android:textSize="20dp"
@@ -24,7 +40,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button8"
         android:layout_width="250dp"
         android:layout_height="120dp"
         android:layout_marginBottom="50dp"
@@ -35,4 +50,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

@@ -17,7 +17,6 @@
         tools:src="@mipmap/ic_launcher"
         android:contentDescription="@string/thumbnail"/>
     <RelativeLayout
-        android:id="@+id/list_text_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"

@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="title_activity_maps">Map</string>
-    <string name="drawer_item_home">abcd</string>
-    <string name="drawer_item_settings">settings</string>
     <string name="thumbnail">thumbnail</string>
 </resources>

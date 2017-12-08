@@ -5,22 +5,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.BinaryHttpResponseHandler;
-import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -31,11 +25,10 @@ import cz.msebera.android.httpclient.Header;
 
 public class LoadSongList extends Activity {
 
-    //list data storage
-    private String songXML = "";
-
     //debug tag
     private final String TAG = "LoadSongList";
+    //list data storage
+    private String songXML = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,23 +39,24 @@ public class LoadSongList extends Activity {
 
         //Download the song list
         client.get("http://www.inf.ed.ac.uk/teaching/courses/selp/data/songs/songs.txt", new
-            TextHttpResponseHandler() {
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    downloadFail();
+                TextHttpResponseHandler() {
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        downloadFail();
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        setSongXML(responseString);
+                        switchActivity();
+                    }
                 }
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    songXML = responseString;
-                    switchActivity();
-                }
-            }
         );
     }
 
     //when download finishes, switch to main and initialize data.txt,
     //solved.txt and solvedbydifficulty.txt if they don't exist yet
-    public void switchActivity () {
+    public void switchActivity() {
 
         System.out.println("switching to main");
         File file = getBaseContext().getFileStreamPath("data.txt");
@@ -99,27 +93,27 @@ public class LoadSongList extends Activity {
                 e.printStackTrace();
             }
         }
-            System.out.println("switching to main1");
-            File file1 = getBaseContext().getFileStreamPath("solved.txt");
+        System.out.println("switching to main1");
+        File file1 = getBaseContext().getFileStreamPath("solved.txt");
 
-            //initialize solved.txt with default values
-            if(!file1.exists()) {
-                String filename1 = "solved.txt";
-                String string1 = "Total songs found: 0";
-                FileOutputStream outputStream1;
+        //initialize solved.txt with default values
+        if (!file1.exists()) {
+            String filename1 = "solved.txt";
+            String string1 = "Total songs found: 0";
+            FileOutputStream outputStream1;
 
-                try {
-                    outputStream1 = openFileOutput(filename1, Context.MODE_PRIVATE);
-                    outputStream1.write(string1.getBytes());
-                    outputStream1.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            try {
+                outputStream1 = openFileOutput(filename1, Context.MODE_PRIVATE);
+                outputStream1.write(string1.getBytes());
+                outputStream1.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        }
         File file2 = getBaseContext().getFileStreamPath("solvedbydifficulty.txt");
 
         //initialize solvedbydifficulty.txt with default values
-        if(!file2.exists()) {
+        if (!file2.exists()) {
             String filename2 = "solvedbydifficulty.txt";
             String string2 = "Easiest \n" +
                     "Easy \n" +
@@ -138,42 +132,48 @@ public class LoadSongList extends Activity {
             }
         }
 
-            System.out.println("switching to main2");
-            Intent intent = new Intent(this, MainActivity.class);
+        System.out.println("switching to main2");
+        Intent intent = new Intent(this, MainActivity.class);
 
-            //switch to MainActivity
-            intent.putExtra("songXML", songXML);
-            Log.d(TAG, "Song XML loaded");
-            startActivity(intent);
-            finish();
-        }
+        //switch to MainActivity
+        intent.putExtra("songXML", getSongXML());
+        Log.d(TAG, "Song XML loaded");
+        startActivity(intent);
+        finish();
+    }
 
-        //if download fails, prompt the user to either retry download or exit the app
-        public void downloadFail(){
-            AlertDialog.Builder builder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-            } else {
-                builder = new AlertDialog.Builder(this);
-            }
-            builder.setTitle("Download failed!")
-                    .setMessage("Press Retry to try downloading the data anew, press Exit to close the application.")
-                    .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            recreate();
-                        }
-                    })
-                    .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            finish();
-                        }
-                    })
-                    .show();
-        }
+    //if download fails, prompt the user to either retry download or exit the app
+    public void downloadFail() {
+        AlertDialog.Builder builder;
+
+        builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        builder.setTitle("Download failed!")
+                .setMessage("Press Retry to try downloading the data anew, press Exit to close the application.")
+                .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        recreate();
+                    }
+                })
+                .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        finish();
+                    }
+                })
+                .show();
+    }
+
+    //getters and setters
+    public String getSongXML() {
+        return songXML;
+    }
+
+    public void setSongXML(String songXML) {
+        this.songXML = songXML;
+    }
 }

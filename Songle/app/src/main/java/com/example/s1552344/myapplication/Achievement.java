@@ -10,7 +10,7 @@ public class Achievement {
     private String progress;
     private String status;
 
-    public Achievement (String title, String progress, String status){
+    public Achievement(String title, String progress, String status) {
         this.title = title;
         this.progress = progress;
         this.status = status;

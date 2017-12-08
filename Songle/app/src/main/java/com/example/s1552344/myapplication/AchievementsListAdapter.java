@@ -1,8 +1,6 @@
 package com.example.s1552344.myapplication;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +8,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+
 /**
  * list adapter implemented by guidelines found at:
  * https://www.raywenderlich.com/124438/android-listview-tutorial
  * Used to feed rows into our Achievements list view
-*/
+ */
 public class AchievementsListAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
@@ -24,19 +22,19 @@ public class AchievementsListAdapter extends BaseAdapter {
 
 
     public AchievementsListAdapter(Context context, ArrayList<Achievement> achievs) {
-        mContext = context;
-        mAchievs = achievs;
-        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        setmContext(context);
+        setmAchievs(achievs);
+        setmInflater((LayoutInflater) getmContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE));
     }
 
     @Override
     public int getCount() {
-        return mAchievs.size();
+        return getmAchievs().size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mAchievs.get(position);
+        return getmAchievs().get(position);
     }
 
     @Override
@@ -46,7 +44,7 @@ public class AchievementsListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View rowView = mInflater.inflate(R.layout.list_view_settings, parent, false);
+        View rowView = getmInflater().inflate(R.layout.list_view_settings, parent, false);
 
         TextView titleTextView =
                 (TextView) rowView.findViewById(R.id.list_title);
@@ -72,16 +70,41 @@ public class AchievementsListAdapter extends BaseAdapter {
         subtitleTextView.setText(achiev.getStatus());
         detailTextView.setText(achiev.getProgress());
 
-        if(achiev.getTitle().startsWith("Collect")){
+        if (achiev.getTitle().startsWith("Collect")) {
             thumbnailImageView.setImageResource(R.drawable.placem);
-        }else if(achiev.getTitle().startsWith("Complete a")) {
+        } else if (achiev.getTitle().startsWith("Complete a")) {
             thumbnailImageView.setImageResource(R.drawable.clock);
-        }else if(achiev.getTitle().startsWith("Complete")){
+        } else if (achiev.getTitle().startsWith("Complete")) {
             thumbnailImageView.setImageResource(R.drawable.puzzle);
-        }else if(achiev.getTitle().startsWith("Walk")){
+        } else if (achiev.getTitle().startsWith("Walk")) {
             thumbnailImageView.setImageResource(R.drawable.foot);
         }
 
         return rowView;
+    }
+
+    //getters and setters
+    public Context getmContext() {
+        return mContext;
+    }
+
+    public void setmContext(Context mContext) {
+        this.mContext = mContext;
+    }
+
+    public LayoutInflater getmInflater() {
+        return mInflater;
+    }
+
+    public void setmInflater(LayoutInflater mInflater) {
+        this.mInflater = mInflater;
+    }
+
+    public ArrayList<Achievement> getmAchievs() {
+        return mAchievs;
+    }
+
+    public void setmAchievs(ArrayList<Achievement> mAchievs) {
+        this.mAchievs = mAchievs;
     }
 }

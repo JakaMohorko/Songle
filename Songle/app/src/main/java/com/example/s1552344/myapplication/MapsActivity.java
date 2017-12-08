@@ -8,15 +8,18 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -35,7 +38,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
@@ -48,11 +50,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-
 /**
  * Main gameplay activity.
  * Here the user can collect placemarks and finally guess which song is being played.
@@ -61,21 +58,23 @@ import android.view.WindowManager;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    //Map variables
-    private GoogleMap mMap;
-    private GoogleApiClient mGoogleApiClient;
-    private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private boolean cameraTracking = false;
-    private boolean firstPan = false;
-
     //debug tag
     private static final String TAG = "MapsActivity";
+    //Map variables
+    private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private GoogleMap mMap;
+    private GoogleApiClient mGoogleApiClient;
+    private boolean cameraTracking = false;
+    private boolean firstPan = false;
 
     //song data
     private ArrayList<String[]> songLyrics;
     private Song selectedSong;
     private ArrayList<String> collectedWords = new ArrayList<>();
     private ArrayList<Song> songList;
+
+    //test vars
+    private String songTitle;
 
     //achievement and statistics tracking
     private int difficulty = 0;
@@ -92,22 +91,45 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private HashMap<String, Bitmap> markerIcons;
 
     //navigation drawer
-    Drawer result;
+    private Drawer result;
 
     //movement data
     private double savedLatitude;
     private double savedLongitude;
 
     //Drawer items
-    SecondaryDrawerItem item1 = new SecondaryDrawerItem().withIdentifier(1).withName("Guess Song").withSelectable(false);
-    SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName("View Words").withSelectable(false);
-    SecondaryDrawerItem item3 = new SecondaryDrawerItem().withIdentifier(3).withName("New Song").withSelectable(false);
-    SecondaryDrawerItem item4 = new SecondaryDrawerItem().withIdentifier(4).withName("Main Menu").withSelectable(false);
-    SecondaryDrawerItem item5 = new SecondaryDrawerItem().withIdentifier(5).withName("Help").withSelectable(false);
-    SecondaryDrawerItem item6 = new SecondaryDrawerItem().withIdentifier(6).withName("Enable Camera Tracking");
-    SecondaryDrawerItem item7 = new SecondaryDrawerItem().withIdentifier(7).withName("Disable Camera Tracking").withSetSelected(true);
-    //item8 - cheat item, used for debugging
-    //SecondaryDrawerItem item8 = new SecondaryDrawerItem().withIdentifier(8).withName("Current song title").withSetSelected(true);
+    private SecondaryDrawerItem item1 = new SecondaryDrawerItem().withIdentifier(1).withName("Guess Song").withSelectable(false);
+    private SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName("View Words").withSelectable(false);
+    private SecondaryDrawerItem item3 = new SecondaryDrawerItem().withIdentifier(3).withName("New Song").withSelectable(false);
+    private SecondaryDrawerItem item4 = new SecondaryDrawerItem().withIdentifier(4).withName("Main Menu").withSelectable(false);
+    private SecondaryDrawerItem item5 = new SecondaryDrawerItem().withIdentifier(5).withName("Help").withSelectable(false);
+    private SecondaryDrawerItem item6 = new SecondaryDrawerItem().withIdentifier(6).withName("Enable Camera Tracking");
+    private SecondaryDrawerItem item7 = new SecondaryDrawerItem().withIdentifier(7).withName("Disable Camera Tracking").withSetSelected(true);
+
+    public static boolean isLocationEnabled(Context context) {
+        //checks whether location is enabled or not
+        int locationMode = 0;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+        } else {
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,27 +138,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_maps);
 
         //Create side navigation drawer
-        result = new DrawerBuilder()
+        setResult(new DrawerBuilder()
                 .withActivity(this)
                 .withTranslucentStatusBar(true)
                 .withActionBarDrawerToggle(true)
                 .addDrawerItems(
                         new DividerDrawerItem(),
-                        item1,
+                        getItem1(),
                         new DividerDrawerItem(),
-                        item2,
+                        getItem2(),
                         new DividerDrawerItem(),
-                        item3,
+                        getItem3(),
                         new DividerDrawerItem(),
-                        item4,
+                        getItem4(),
                         new DividerDrawerItem(),
-                        item5,
+                        getItem5(),
                         new DividerDrawerItem(),
-                        item6,
-                        item7,
+                        getItem6(),
+                        getItem7(),
                         new DividerDrawerItem()
-                       // item8,
-                        //new DividerDrawerItem()
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -157,22 +177,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if (position == 9) {
                             switchHelp();
                         }
-                        if(position == 11){
-                            cameraTracking=true;
+                        if (position == 11) {
+                            setCameraTracking(true);
                         }
-                        if(position == 12){
-                            cameraTracking=false;
+                        if (position == 12) {
+                            setCameraTracking(false);
                         }
-                       /* if(position == 14){
-                            showTitle();
-                        }*/
                         return true;
                     }
                 })
-                .build();
+                .build());
 
         //set none of the buttons as selected
-        result.setSelection(999);
+        getResult().setSelection(999);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -180,40 +197,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // keep the user interface responsive
         mapFragment.getMapAsync(this);
         // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
+        if (getmGoogleApiClient() == null) {
+            setmGoogleApiClient(new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
-                    .build();
+                    .build());
         }
 
         //log starting time of the play session
-        startTime = System.currentTimeMillis();
+        setStartTime(System.currentTimeMillis());
 
         Intent intent = getIntent();
         //obtained all extras passed from previous activities
-        selectedSong = (Song) intent.getSerializableExtra("selectedSong");
-        difficulty = Integer.parseInt((String) intent.getSerializableExtra("difficulty"));
-        songLyrics = (ArrayList<String[]>) intent.getSerializableExtra("songLyrics");
-        placemarkCoordinates = (ArrayList<double[]>) intent.getSerializableExtra("placemarkCoordinates");
-        placemarkNames = (ArrayList<String>) intent.getSerializableExtra("placemarkNames");
-        placemarkStyles = (ArrayList<String>) intent.getSerializableExtra("placemarkStyles");
-        markerIcons = (HashMap<String, Bitmap>) intent.getSerializableExtra("placemarkIcons");
-        songList = (ArrayList<Song>) intent.getSerializableExtra("songList");
+        setSelectedSong((Song) intent.getSerializableExtra("selectedSong"));
+        setDifficulty(Integer.parseInt((String) intent.getSerializableExtra("difficulty")));
+        setSongLyrics((ArrayList<String[]>) intent.getSerializableExtra("songLyrics"));
+        setPlacemarkCoordinates((ArrayList<double[]>) intent.getSerializableExtra("placemarkCoordinates"));
+        setPlacemarkNames((ArrayList<String>) intent.getSerializableExtra("placemarkNames"));
+        setPlacemarkStyles((ArrayList<String>) intent.getSerializableExtra("placemarkStyles"));
+        setMarkerIcons((HashMap<String, Bitmap>) intent.getSerializableExtra("placemarkIcons"));
+        setSongList((ArrayList<Song>) intent.getSerializableExtra("songList"));
+        setSongTitle(getSelectedSong().getTitle());
 
-        Log.d(TAG, "Lyrics" + songLyrics);
-        Log.d(TAG, "selected song" + selectedSong.getNumber());
+        Log.d(TAG, "Lyrics" + getSongLyrics());
+        Log.d(TAG, "selected song" + getSelectedSong().getNumber());
 
         //ask the user to turn on location, if it is off and return to main menu
         final Context context = this;
-        if(!isLocationEnabled(this)){
+        if (!isLocationEnabled(this)) {
             AlertDialog.Builder builder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-            } else {
-                builder = new AlertDialog.Builder(this);
-            }
+
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
             builder.setTitle("Location disabled")
                     .setMessage("Please turn Location on and start a new game.")
                     .setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
@@ -223,7 +238,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     })
                     .setNegativeButton("Location Settings", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                             context.startActivity(myIntent);
                             finish();
                         }
@@ -231,7 +246,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
-                            switchMain();
+                            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            context.startActivity(myIntent);
+                            finish();
                         }
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -253,33 +270,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //adds markers at the coordinates obtained from MapDownload with correct styles,
     //if both the map has been created and markerIcons initialized
     public void addMarkers() {
-        Log.d(TAG, "adding markers 1 " + markerIcons);
-        if (mMap != null && markerIcons != null) {
+        Log.d(TAG, "adding markers 1 " + getMarkerIcons());
+        if (getmMap() != null && getMarkerIcons() != null) {
             Log.d(TAG, "adding markers 2");
-            for (int x = 0; x < placemarkNames.size(); x++) {
+            for (int x = 0; x < getPlacemarkNames().size(); x++) {
 
-                Log.d(TAG, "current icon " + markerIcons.get(placemarkStyles.get(x)));
+                Log.d(TAG, "current icon " + getMarkerIcons().get(getPlacemarkStyles().get(x)));
 
-                currentMarkers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(placemarkCoordinates.get(x)[0], placemarkCoordinates.get(x)[1]))
-                        .title(placemarkNames.get(x))
-                        .icon(BitmapDescriptorFactory.fromBitmap(markerIcons.get(placemarkStyles.get(x))))));
+                getCurrentMarkers().add(getmMap().addMarker(new MarkerOptions().position(new LatLng(getPlacemarkCoordinates().get(x)[0], getPlacemarkCoordinates().get(x)[1]))
+                        .title(getPlacemarkNames().get(x))
+                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerIcons().get(getPlacemarkStyles().get(x))))));
             }
         }
+        System.out.println(getSelectedSong().getTitle());
     }
 
     //connect the google api client
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+        getmGoogleApiClient().connect();
     }
 
     //on stop disconnect the api client
     @Override
     protected void onStop() {
         super.onStop();
-        if (mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
+        if (getmGoogleApiClient().isConnected()) {
+            getmGoogleApiClient().disconnect();
         }
 
     }
@@ -290,7 +308,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         FileInputStream fis = null;
-        timeSpent = (System.currentTimeMillis() - startTime) / 1000;
+        setTimeSpent((System.currentTimeMillis() - getStartTime()) / 1000);
         Log.d(TAG, "editing data");
         try {
 
@@ -316,75 +334,75 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 int val = Integer.parseInt(line.split(" ")[1]);
 
                 if (arg.equals("DistanceWalked")) {
-                    System.out.println(distanceWalked);
-                    val += distanceWalked;
+                    System.out.println(getDistanceWalked());
+                    val += getDistanceWalked();
                 }
                 if (arg.equals("TotalSolved") && solved) {
                     val++;
 
                 }
-                if (arg.equals("EasiestSolved") && difficulty == 5 && solved) {
+                if (arg.equals("EasiestSolved") && getDifficulty() == 5 && solved) {
                     val++;
                     difSolved = val;
                 }
-                if (arg.equals("EasySolved") && difficulty == 4 && solved) {
+                if (arg.equals("EasySolved") && getDifficulty() == 4 && solved) {
                     val++;
                     difSolved = val;
                 }
-                if (arg.equals("MediumSolved") && difficulty == 3 && solved) {
+                if (arg.equals("MediumSolved") && getDifficulty() == 3 && solved) {
                     val++;
                     difSolved = val;
                 }
-                if (arg.equals("HardSolved") && difficulty == 2 && solved) {
+                if (arg.equals("HardSolved") && getDifficulty() == 2 && solved) {
                     val++;
                     difSolved = val;
                 }
-                if (arg.equals("HardestSolved") && difficulty == 1 && solved) {
+                if (arg.equals("HardestSolved") && getDifficulty() == 1 && solved) {
                     val++;
                     difSolved = val;
                 }
-                if (arg.equals("FastestTimeEasiest") && difficulty == 5 && solved) {
-                    if (timeSpent < val || val == 0) {
-                        val = (int) timeSpent;
+                if (arg.equals("FastestTimeEasiest") && getDifficulty() == 5 && solved) {
+                    if (getTimeSpent() < val || val == 0) {
+                        val = (int) getTimeSpent();
                     }
                 }
-                if (arg.equals("FastestTimeEasy") && difficulty == 4 && solved) {
-                    if (timeSpent < val || val == 0) {
-                        val = (int) timeSpent;
+                if (arg.equals("FastestTimeEasy") && getDifficulty() == 4 && solved) {
+                    if (getTimeSpent() < val || val == 0) {
+                        val = (int) getTimeSpent();
                     }
                 }
-                if (arg.equals("FastestTimeMedium") && difficulty == 3 && solved) {
-                    if (timeSpent < val || val == 0) {
-                        val = (int) timeSpent;
+                if (arg.equals("FastestTimeMedium") && getDifficulty() == 3 && solved) {
+                    if (getTimeSpent() < val || val == 0) {
+                        val = (int) getTimeSpent();
                     }
                 }
-                if (arg.equals("FastestTimeHard") && difficulty == 2 && solved) {
-                    if (timeSpent < val || val == 0) {
-                        val = (int) timeSpent;
+                if (arg.equals("FastestTimeHard") && getDifficulty() == 2 && solved) {
+                    if (getTimeSpent() < val || val == 0) {
+                        val = (int) getTimeSpent();
                     }
                 }
-                if (arg.equals("FastestTimeHardest") && difficulty == 1 && solved) {
-                    if (timeSpent < val || val == 0) {
-                        val = (int) timeSpent;
+                if (arg.equals("FastestTimeHardest") && getDifficulty() == 1 && solved) {
+                    if (getTimeSpent() < val || val == 0) {
+                        val = (int) getTimeSpent();
                     }
                 }
                 if (arg.equals("PlacemarksCollected")) {
-                    val += placemarksCollected;
+                    val += getPlacemarksCollected();
                 }
-                if (arg.equals("AverageTimeEasiest") && difficulty == 5 && solved) {
-                    val = (val * (difSolved - 1) + (int) timeSpent) / difSolved;
+                if (arg.equals("AverageTimeEasiest") && getDifficulty() == 5 && solved) {
+                    val = (val * (difSolved - 1) + (int) getTimeSpent()) / difSolved;
                 }
-                if (arg.equals("AverageTimeEasy") && difficulty == 4 && solved) {
-                    val = (val * (difSolved - 1) + (int) timeSpent) / difSolved;
+                if (arg.equals("AverageTimeEasy") && getDifficulty() == 4 && solved) {
+                    val = (val * (difSolved - 1) + (int) getTimeSpent()) / difSolved;
                 }
-                if (arg.equals("AverageTimeMedium") && difficulty == 3 && solved) {
-                    val = (val * (difSolved - 1) + (int) timeSpent) / difSolved;
+                if (arg.equals("AverageTimeMedium") && getDifficulty() == 3 && solved) {
+                    val = (val * (difSolved - 1) + (int) getTimeSpent()) / difSolved;
                 }
-                if (arg.equals("AverageTimeHard") && difficulty == 2 && solved) {
-                    val = (val * (difSolved - 1) + (int) timeSpent) / difSolved;
+                if (arg.equals("AverageTimeHard") && getDifficulty() == 2 && solved) {
+                    val = (val * (difSolved - 1) + (int) getTimeSpent()) / difSolved;
                 }
-                if (arg.equals("AverageTimeHardest") && difficulty == 1 && solved) {
-                    val = (val * (difSolved - 1) + (int) timeSpent) / difSolved;
+                if (arg.equals("AverageTimeHardest") && getDifficulty() == 1 && solved) {
+                    val = (val * (difSolved - 1) + (int) getTimeSpent()) / difSolved;
                 }
 
 
@@ -413,16 +431,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 System.out.println("current line: " + line);
 
                 //if the currently played song has been solved, update the data on it
-                if (("Title: " + selectedSong.getTitle()).equals(line)) {
-                    System.out.println("Song already in list" + selectedSong.getTitle());
+                if (("Title: " + getSelectedSong().getTitle()).equals(line)) {
+                    System.out.println("Song already in list" + getSelectedSong().getTitle());
                     alreadySolved = true;
                     output = output + line + "\n";
 
                     //read and adjust Best Time line
                     line = bufferedReader1.readLine();
                     int val = Integer.parseInt(line.split(" ")[2]);
-                    if (timeSpent < val) {
-                        output = output + "Best time: " + timeSpent + "\n";
+                    if (getTimeSpent() < val) {
+                        output = output + "Best time: " + getTimeSpent() + "\n";
                     } else {
                         output = output + line + "\n";
                     }
@@ -434,8 +452,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     //read and adjust the Highest difficulty line
                     line = bufferedReader1.readLine();
                     val = Integer.parseInt(line.split(" ")[2]);
-                    if (val > difficulty) {
-                        output = output + "Highest difficulty: " + difficulty + "\n";
+                    if (val > getDifficulty()) {
+                        output = output + "Highest difficulty: " + getDifficulty() + "\n";
                     } else {
                         output = output + line + "\n";
 
@@ -443,11 +461,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 } else if (line.split(" ")[0].equals("Total") && !alreadySolved) {
                     //if the song hasn't been completed yet and we're at the last line,
                     //add the song data to the file
-                    output = output + "Artist: " + selectedSong.getArtist() + "\n";
-                    output = output + "Title: " + selectedSong.getTitle() + "\n";
-                    output = output + "Best time: " + timeSpent + "\n";
-                    output = output + "Link: " + selectedSong.getLink() + "\n";
-                    output = output + "Highest difficulty: " + difficulty + "\n\n";
+                    output = output + "Artist: " + getSelectedSong().getArtist() + "\n";
+                    output = output + "Title: " + getSelectedSong().getTitle() + "\n";
+                    output = output + "Best time: " + getTimeSpent() + "\n";
+                    output = output + "Link: " + getSelectedSong().getLink() + "\n";
+                    output = output + "Highest difficulty: " + getDifficulty() + "\n\n";
                     output = output + "Total songs found: " + (Integer.parseInt(line.split(" ")[3]) + 1) + "\n";
                     System.out.println(output);
                 } else if (!line.equals("")) {
@@ -486,56 +504,56 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     //for each difficulty, check the difficulty of the song currently being played.
                     //if it matches, check if the song was already completed at that difficulty.
                     //if not, add its number to that difficulty category
-                    if (difficulty == 5 && arg.equals("Easiest")) {
+                    if (getDifficulty() == 5 && arg.equals("Easiest")) {
                         for (int x = 0; x < split.length; x++) {
-                            if (split[x].equals(selectedSong.getNumber().toString())) {
+                            if (split[x].equals(getSelectedSong().getNumber().toString())) {
                                 alreadySolved = true;
                                 break;
                             }
                         }
                         if (!alreadySolved) {
-                            output = output + line + " " + selectedSong.getNumber() + "\n";
+                            output = output + line + " " + getSelectedSong().getNumber() + "\n";
                         }
-                    } else if (difficulty == 4 && arg.equals("Easy")) {
+                    } else if (getDifficulty() == 4 && arg.equals("Easy")) {
                         for (int x = 0; x < split.length; x++) {
-                            if (split[x].equals(selectedSong.getNumber().toString())) {
+                            if (split[x].equals(getSelectedSong().getNumber().toString())) {
                                 alreadySolved = true;
                                 break;
                             }
                         }
                         if (!alreadySolved) {
-                            output = output + line + " " + selectedSong.getNumber() + "\n";
+                            output = output + line + " " + getSelectedSong().getNumber() + "\n";
                         }
-                    } else if (difficulty == 3 && arg.equals("Medium")) {
+                    } else if (getDifficulty() == 3 && arg.equals("Medium")) {
                         for (int x = 0; x < split.length; x++) {
-                            if (split[x].equals(selectedSong.getNumber().toString())) {
+                            if (split[x].equals(getSelectedSong().getNumber().toString())) {
                                 alreadySolved = true;
                                 break;
                             }
                         }
                         if (!alreadySolved) {
-                            output = output + line + " " + selectedSong.getNumber() + "\n";
+                            output = output + line + " " + getSelectedSong().getNumber() + "\n";
                         }
-                    } else if (difficulty == 2 && arg.equals("Hard")) {
+                    } else if (getDifficulty() == 2 && arg.equals("Hard")) {
                         for (int x = 0; x < split.length; x++) {
-                            if (split[x].equals(selectedSong.getNumber().toString())) {
+                            if (split[x].equals(getSelectedSong().getNumber().toString())) {
                                 alreadySolved = true;
                                 break;
                             }
                         }
                         if (!alreadySolved) {
-                            output = output + line + " " + selectedSong.getNumber() + "\n";
+                            output = output + line + " " + getSelectedSong().getNumber() + "\n";
                         }
-                    } else if (difficulty == 1 && arg.equals("Hardest")) {
+                    } else if (getDifficulty() == 1 && arg.equals("Hardest")) {
                         System.out.println("hardest test");
                         for (int x = 0; x < split.length; x++) {
-                            if (split[x].equals(selectedSong.getNumber().toString())) {
+                            if (split[x].equals(getSelectedSong().getNumber().toString())) {
                                 alreadySolved = true;
                                 break;
                             }
                         }
                         if (!alreadySolved) {
-                            output = output + line + " " + selectedSong.getNumber() + "\n";
+                            output = output + line + " " + getSelectedSong().getNumber() + "\n";
                         }
                     } else {
                         output = output + line + "\n";
@@ -575,19 +593,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //on map ready, enable your location and location button and add markers to the map
-        mMap = googleMap;
+        setmMap(googleMap);
 
         try {
-            mMap.setMyLocationEnabled(true);
+            getmMap().setMyLocationEnabled(true);
         } catch (SecurityException se) {
             System.out.println("Security exception thrown[onMapReady]");
+
         }
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        getmMap().getUiSettings().setMyLocationButtonEnabled(true);
         addMarkers();
 
 
     }
-
 
     protected void createLocationRequest() {
         // Set the parameters for the location request
@@ -599,7 +617,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(getmGoogleApiClient(), mLocationRequest, this);
         }
     }
 
@@ -623,32 +641,39 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    getPERMISSIONS_REQUEST_ACCESS_FINE_LOCATION());
+
         }
     }
+
 
     @Override
     public void onLocationChanged(Location current) {
 
-        if(!firstPan) {
-            savedLatitude = current.getLatitude();
-            savedLongitude = current.getLongitude();
-            LatLng latLng = new LatLng(savedLatitude,savedLongitude);
+        //on the first change of location, always pan to the user and save the current LatLon
+        if (!isFirstPan()) {
+            setSavedLatitude(current.getLatitude());
+            setSavedLongitude(current.getLongitude());
+            LatLng latLng = new LatLng(getSavedLatitude(), getSavedLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
-            mMap.animateCamera(cameraUpdate);
-            firstPan=true;
+            getmMap().animateCamera(cameraUpdate);
+            setFirstPan(true);
         }
 
         System.out.println(
                 "[onLocationChanged] Lat / long now (" +
                         String.valueOf(current.getLatitude()) + "," +
                         String.valueOf(current.getLongitude()) + ")");
+
+        //calculate the distance moved since last OnLocationChanged call
+        //using the haversine formula
+
         final int R = 6371; // Radius of the earth
 
         double lat1 = current.getLatitude();
-        double lat2 = savedLatitude;
+        double lat2 = getSavedLatitude();
         double lon1 = current.getLongitude();
-        double lon2 = savedLongitude;
+        double lon2 = getSavedLongitude();
 
         double latDistance = Math.toRadians(lat2 - lat1);
         double lonDistance = Math.toRadians(lon2 - lon1);
@@ -660,18 +685,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         distance = Math.pow(distance, 2);
         distance = Math.sqrt(distance);
-        distanceWalked += distance;
+        setDistanceWalked(getDistanceWalked() + distance);
 
-        savedLatitude = current.getLatitude();
-        savedLongitude = current.getLongitude();
+        setSavedLatitude(current.getLatitude());
+        setSavedLongitude(current.getLongitude());
 
-        for (int x = 0; x < placemarkCoordinates.size(); x++) {
-            Log.d(TAG, "current placemark  " + placemarkCoordinates.get(x)[0] + " " + placemarkCoordinates.get(x)[1]);
+        for (int x = 0; x < getPlacemarkCoordinates().size(); x++) {
+
+            //Calculate the distance from the current location to all the placemarks
+            //that have not yet been collected
+            Log.d(TAG, "current placemark  " + getPlacemarkCoordinates().get(x)[0] + " " + getPlacemarkCoordinates().get(x)[1]);
 
             lat1 = current.getLatitude();
-            lat2 = placemarkCoordinates.get(x)[0];
+            lat2 = getPlacemarkCoordinates().get(x)[0];
             lon1 = current.getLongitude();
-            lon2 = placemarkCoordinates.get(x)[1];
+            lon2 = getPlacemarkCoordinates().get(x)[1];
 
             latDistance = Math.toRadians(lat2 - lat1);
             lonDistance = Math.toRadians(lon2 - lon1);
@@ -685,21 +713,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             distance = Math.sqrt(distance);
             Log.d(TAG, "distance " + distance);
             if (distance < 25) {
-                String[] tempNames = placemarkNames.get(x).split(":");
+                //if the placemark currently being analyzed is within 25 meters of the user,
+                //save the word associated with it into collected words and remove the marker from the map
+                //and other storage items where the marker is referenced.
+                String[] tempNames = getPlacemarkNames().get(x).split(":");
                 int first = Integer.parseInt(tempNames[0]);
                 int second = Integer.parseInt(tempNames[1]);
                 Log.d(TAG, "first and second " + first + " " + second);
-                Log.d(TAG, "found word " + songLyrics.get(first - 1)[second - 1]);
+                Log.d(TAG, "found word " + getSongLyrics().get(first - 1)[second - 1]);
 
-                placemarksCollected++;
-                Log.d(TAG, "number of placemarks " + placemarksCollected);
-                collectedWords.add(songLyrics.get(first - 1)[second - 1]);
+                setPlacemarksCollected(getPlacemarksCollected() + 1);
+                Log.d(TAG, "number of placemarks " + getPlacemarksCollected());
+                getCollectedWords().add(getSongLyrics().get(first - 1)[second - 1]);
 
-                placemarkCoordinates.remove(x);
-                placemarkNames.remove(x);
-                placemarkStyles.remove(x);
-                currentMarkers.get(x).remove();
-                currentMarkers.remove(x);
+                getPlacemarkCoordinates().remove(x);
+                getPlacemarkNames().remove(x);
+                getPlacemarkStyles().remove(x);
+                getCurrentMarkers().get(x).remove();
+                getCurrentMarkers().remove(x);
                 x--;
             }
 
@@ -708,16 +739,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        if(cameraTracking) {
+        if (isCameraTracking()) {
+            //If the user enabled camera tracking, pan to their location
+            //every time OnLocationChanged is called
             LatLng latLng = new LatLng(current.getLatitude(), current.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
-            mMap.animateCamera(cameraUpdate);
+            getmMap().animateCamera(cameraUpdate);
         }
 
 
-
-
     }
+
 
     @Override
     public void onConnectionSuspended(int flag) {
@@ -726,19 +758,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        // An unresolvable error has occurred and a connection to Google APIs
-        // could not be established. Display an error message, or handle
-        // the failure silently
+        //alert the user of the fact that the connection failed and prompt them
+        //to start a new game
         System.out.println(" >>>> onConnectionFailed");
+        AlertDialog.Builder builder;
+
+        builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        builder.setTitle("Connection to maps failed!")
+                .setMessage("Please start a new game to retry.")
+                .setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switchMain();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        switchMain();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
-    public void exitCheck(){
+    public void exitCheck() {
+        //opens a dialog asking the user whether or not they really want to
+        //return to the Main Menu, as their gameplay progress will not be saved.
         AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-        } else {
-            builder = new AlertDialog.Builder(this);
-        }
+
+        builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         builder.setTitle("Return to Main Menu?")
                 .setMessage("Gameplay progress will not be saved! Would you like to return to the Main Menu?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -760,7 +808,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
-    public void switchMain (){
+
+    public void switchMain() {
+        //switches to the MainActivity
 
         Intent intent = new Intent(this, MainActivity.class);
 
@@ -769,21 +819,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         finish();
     }
 
-    public void switchWords(){
+    public void switchWords() {
+        //switches to WordsActivity
         Intent intent = new Intent(this, WordsActivity.class);
 
-        intent.putExtra("collectedWords", collectedWords);
+        intent.putExtra("collectedWords", getCollectedWords());
         startActivity(intent);
 
     }
 
-    public void difficultyCheck(){
+    public void difficultyCheck() {
+        //When New Game is pressed asks the user if they really want to return
+        //to the difficulty select activity
         AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-        } else {
-            builder = new AlertDialog.Builder(this);
-        }
+
+        builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         builder.setTitle("Return to Difficulty Select?")
                 .setMessage("Gameplay progress will not be saved! Would you like to return to the Difficulty Selection Menu?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -806,73 +856,280 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .show();
 
     }
-    public void switchDiffSelect(){
-        Intent intent = new Intent (this, DifficultySelect.class);
 
-        intent.putExtra("songList", songList);
+    public void switchDiffSelect() {
+        //switches to difficulty select
+        Intent intent = new Intent(this, DifficultySelect.class);
+
+        intent.putExtra("songList", getSongList());
 
         startActivity(intent);
         finish();
     }
 
-    public void switchGuess(){
-        Intent intent = new Intent (this, GuessSong.class);
+    public void switchGuess() {
+        //switches to SongGuess activity
+        Intent intent = new Intent(this, GuessSong.class);
 
-        intent.putExtra("selectedSong", selectedSong);
-        intent.putExtra("distance", distanceWalked);
-        intent.putExtra("time", startTime);
-        intent.putExtra("placemarks", placemarksCollected);
-
-        startActivity(intent);
-    }
-    public void switchHelp(){
-        Intent intent = new Intent (this, HelpMaps.class);
+        intent.putExtra("selectedSong", getSelectedSong());
+        intent.putExtra("distance", getDistanceWalked());
+        intent.putExtra("time", getStartTime());
+        intent.putExtra("placemarks", getPlacemarksCollected());
 
         startActivity(intent);
     }
-    public  void toggleDrawer(View view){
-        result.openDrawer();
+
+    public void switchHelp() {
+        //switches to the HelpMaps activity
+        Intent intent = new Intent(this, HelpMaps.class);
+
+        startActivity(intent);
     }
 
-    public void guessSong(View view){
+    public void toggleDrawer(View view) {
+        //On hamburger icon press, open the side navigation drawer
+        getResult().openDrawer();
+    }
+
+    public void guessSong(View view) {
         switchGuess();
     }
-    public void showTitle(){
-        AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-        } else {
-            builder = new AlertDialog.Builder(this);
-        }
-        builder.setTitle(selectedSong.getTitle())
-                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                })
+    //Getters and Setters
 
-                .show();
+    public GoogleMap getmMap() {
+        return mMap;
     }
-    public static boolean isLocationEnabled(Context context) {
-        int locationMode = 0;
-        String locationProviders;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-            try {
-                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+    public void setmMap(GoogleMap mMap) {
+        this.mMap = mMap;
+    }
 
-            } catch (Settings.SettingNotFoundException e) {
-                e.printStackTrace();
-                return false;
-            }
+    public GoogleApiClient getmGoogleApiClient() {
+        return mGoogleApiClient;
+    }
 
-            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+    public void setmGoogleApiClient(GoogleApiClient mGoogleApiClient) {
+        this.mGoogleApiClient = mGoogleApiClient;
+    }
 
-        }else{
-            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-            return !TextUtils.isEmpty(locationProviders);
-        }
+    public int getPERMISSIONS_REQUEST_ACCESS_FINE_LOCATION() {
+        return PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
+    }
 
+    public boolean isCameraTracking() {
+        return cameraTracking;
+    }
 
+    public void setCameraTracking(boolean cameraTracking) {
+        this.cameraTracking = cameraTracking;
+    }
+
+    public boolean isFirstPan() {
+        return firstPan;
+    }
+
+    public void setFirstPan(boolean firstPan) {
+        this.firstPan = firstPan;
+    }
+
+    public ArrayList<String[]> getSongLyrics() {
+        return songLyrics;
+    }
+
+    public void setSongLyrics(ArrayList<String[]> songLyrics) {
+        this.songLyrics = songLyrics;
+    }
+
+    public Song getSelectedSong() {
+        return selectedSong;
+    }
+
+    public void setSelectedSong(Song selectedSong) {
+        this.selectedSong = selectedSong;
+    }
+
+    public ArrayList<String> getCollectedWords() {
+        return collectedWords;
+    }
+
+    public void setCollectedWords(ArrayList<String> collectedWords) {
+        this.collectedWords = collectedWords;
+    }
+
+    public ArrayList<Song> getSongList() {
+        return songList;
+    }
+
+    public void setSongList(ArrayList<Song> songList) {
+        this.songList = songList;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public double getDistanceWalked() {
+        return distanceWalked;
+    }
+
+    public void setDistanceWalked(double distanceWalked) {
+        this.distanceWalked = distanceWalked;
+    }
+
+    public long getTimeSpent() {
+        return timeSpent;
+    }
+
+    public void setTimeSpent(long timeSpent) {
+        this.timeSpent = timeSpent;
+    }
+
+    public int getPlacemarksCollected() {
+        return placemarksCollected;
+    }
+
+    public void setPlacemarksCollected(int placemarksCollected) {
+        this.placemarksCollected = placemarksCollected;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public ArrayList<double[]> getPlacemarkCoordinates() {
+        return placemarkCoordinates;
+    }
+
+    public void setPlacemarkCoordinates(ArrayList<double[]> placemarkCoordinates) {
+        this.placemarkCoordinates = placemarkCoordinates;
+    }
+
+    public ArrayList<String> getPlacemarkNames() {
+        return placemarkNames;
+    }
+
+    public void setPlacemarkNames(ArrayList<String> placemarkNames) {
+        this.placemarkNames = placemarkNames;
+    }
+
+    public ArrayList<String> getPlacemarkStyles() {
+        return placemarkStyles;
+    }
+
+    public void setPlacemarkStyles(ArrayList<String> placemarkStyles) {
+        this.placemarkStyles = placemarkStyles;
+    }
+
+    public ArrayList<Marker> getCurrentMarkers() {
+        return currentMarkers;
+    }
+
+    public void setCurrentMarkers(ArrayList<Marker> currentMarkers) {
+        this.currentMarkers = currentMarkers;
+    }
+
+    public HashMap<String, Bitmap> getMarkerIcons() {
+        return markerIcons;
+    }
+
+    public void setMarkerIcons(HashMap<String, Bitmap> markerIcons) {
+        this.markerIcons = markerIcons;
+    }
+
+    public Drawer getResult() {
+        return result;
+    }
+
+    public void setResult(Drawer result) {
+        this.result = result;
+    }
+
+    public double getSavedLatitude() {
+        return savedLatitude;
+    }
+
+    public void setSavedLatitude(double savedLatitude) {
+        this.savedLatitude = savedLatitude;
+    }
+
+    public double getSavedLongitude() {
+        return savedLongitude;
+    }
+
+    public void setSavedLongitude(double savedLongitude) {
+        this.savedLongitude = savedLongitude;
+    }
+
+    public SecondaryDrawerItem getItem1() {
+        return item1;
+    }
+
+    public void setItem1(SecondaryDrawerItem item1) {
+        this.item1 = item1;
+    }
+
+    public SecondaryDrawerItem getItem2() {
+        return item2;
+    }
+
+    public void setItem2(SecondaryDrawerItem item2) {
+        this.item2 = item2;
+    }
+
+    public SecondaryDrawerItem getItem3() {
+        return item3;
+    }
+
+    public void setItem3(SecondaryDrawerItem item3) {
+        this.item3 = item3;
+    }
+
+    public SecondaryDrawerItem getItem4() {
+        return item4;
+    }
+
+    public void setItem4(SecondaryDrawerItem item4) {
+        this.item4 = item4;
+    }
+
+    public SecondaryDrawerItem getItem5() {
+        return item5;
+    }
+
+    public void setItem5(SecondaryDrawerItem item5) {
+        this.item5 = item5;
+    }
+
+    public SecondaryDrawerItem getItem6() {
+        return item6;
+    }
+
+    public void setItem6(SecondaryDrawerItem item6) {
+        this.item6 = item6;
+    }
+
+    public SecondaryDrawerItem getItem7() {
+        return item7;
+    }
+
+    public void setItem7(SecondaryDrawerItem item7) {
+        this.item7 = item7;
+    }
+
+    public String getSongTitle() {
+        return songTitle;
+    }
+
+    public void setSongTitle(String songTitle) {
+        this.songTitle = songTitle;
     }
 }

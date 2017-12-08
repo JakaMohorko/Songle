@@ -1,14 +1,15 @@
 package com.example.s1552344.myapplication;
 
 /**
- * Created by s1552344 on 06/12/17.
+ * Object class used for feeding data into the Gameplay Statistics
+ * list view
  */
 
 public class Statistic {
     private String title;
     private int progress;
 
-    public Statistic (String title, int progress){
+    public Statistic(String title, int progress) {
         this.title = title;
         this.progress = progress;
     }

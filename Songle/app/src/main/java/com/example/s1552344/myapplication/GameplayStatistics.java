@@ -1,13 +1,9 @@
 package com.example.s1552344.myapplication;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -109,17 +105,25 @@ public class GameplayStatistics extends AppCompatActivity {
         }
 
         //Populate the list view using a custon list view adapter
-        mListView = (ListView) findViewById(R.id.listViewStats);
-        System.out.println("adapter " + mListView);
+        setmListView((ListView) findViewById(R.id.listViewStats));
+        System.out.println("adapter " + getmListView());
 
         StatisticsAdapter adapter = new StatisticsAdapter(this, statistics);
-        mListView.setAdapter(adapter);
+        getmListView().setAdapter(adapter);
 
     }
+
     //back button press function
-    public void back (View view){
+    public void back(View view) {
         finish();
     }
 
+    //getters and setters
+    public ListView getmListView() {
+        return mListView;
+    }
 
+    public void setmListView(ListView mListView) {
+        this.mListView = mListView;
+    }
 }

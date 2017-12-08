@@ -1,7 +1,6 @@
 package com.example.s1552344.myapplication;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 
 /**
  * Class for song data.

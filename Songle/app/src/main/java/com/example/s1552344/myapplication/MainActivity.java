@@ -2,39 +2,18 @@ package com.example.s1552344.myapplication;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.PixelFormat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.BinaryHttpResponseHandler;
-import com.loopj.android.http.FileAsyncHttpResponseHandler;
-import com.loopj.android.http.TextHttpResponseHandler;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Random;
-
-import cz.msebera.android.httpclient.Header;
 
 /**
  * Main menu activity of the app.
@@ -49,6 +28,14 @@ public class MainActivity extends Activity {
 
     //list of songs
     private static ArrayList<Song> songList = new ArrayList<>();
+
+    public static ArrayList<Song> getSongList() {
+        return songList;
+    }
+
+    public static void setSongList(ArrayList<Song> songList) {
+        MainActivity.songList = songList;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +53,7 @@ public class MainActivity extends Activity {
         updateSongs(songXML);
     }
 
+    //on button press  functions
 
     //parse the SongList string and separate the data to be added
     //into the songList array list
@@ -75,7 +63,7 @@ public class MainActivity extends Activity {
             factory.setNamespaceAware(true);
             XmlPullParser xpp = factory.newPullParser();
 
-            songList.clear();
+            getSongList().clear();
             xpp.setInput(new StringReader(SongList)); // pass input whatever xml you have
             int eventType = xpp.getEventType();
             String currentTag = "";
@@ -88,7 +76,7 @@ public class MainActivity extends Activity {
                     Log.d(TAG, "Start tag " + xpp.getName());
                     currentTag = xpp.getName();
                     if (xpp.getName().equals("Song")) {
-                        songList.add(new Song());
+                        getSongList().add(new Song());
                         songCounter++;
                     }
 
@@ -99,17 +87,17 @@ public class MainActivity extends Activity {
                     Log.d(TAG, "Text " + xpp.getText()); // here you get the text from xml
                     if (currentTag.equals("Number")) {
                         //Log.d(TAG, "Number " + xpp.getText());
-                        songList.get(songCounter).setNumber(xpp.getText());
-                        Log.d(TAG, "Number is " + songList.get(songCounter).getNumber());
+                        getSongList().get(songCounter).setNumber(xpp.getText());
+                        Log.d(TAG, "Number is " + getSongList().get(songCounter).getNumber());
                     }
                     if (currentTag.equals("Artist")) {
-                        songList.get(songCounter).setArtist(xpp.getText());
+                        getSongList().get(songCounter).setArtist(xpp.getText());
                     }
                     if (currentTag.equals("Title")) {
-                        songList.get(songCounter).setTitle(xpp.getText());
+                        getSongList().get(songCounter).setTitle(xpp.getText());
                     }
                     if (currentTag.equals("Link")) {
-                        songList.get(songCounter).setLink(xpp.getText());
+                        getSongList().get(songCounter).setLink(xpp.getText());
                     }
                 }
                 eventType = xpp.next();
@@ -126,43 +114,47 @@ public class MainActivity extends Activity {
     }
 
     //switch to the DifficultySelect activity, passing along the song list
-    public void switchActivity (View view){
+    public void switchActivity(View view) {
         Intent intent = new Intent(this, DifficultySelect.class);
-        for(int x = 0; x < songList.size(); x++){
-            System.out.println("song number " + songList.get(x).getNumber());
+        for (int x = 0; x < getSongList().size(); x++) {
+            System.out.println("song number " + getSongList().get(x).getNumber());
         }
 
-        intent.putExtra("songList", songList);
+        intent.putExtra("songList", getSongList());
 
         startActivity(intent);
     }
 
-    //on button press  functions
-
     //switch to the GameplayStatistics activity
-    public void switchStatistics (View view){
+    public void switchStatistics(View view) {
         Intent intent = new Intent(this, GameplayStatistics.class);
 
         startActivity(intent);
     }
+
     //switch to the SongList activity
-    public void switchSongs (View view){
+    public void switchSongs(View view) {
         Intent intent = new Intent(this, SongList.class);
 
         startActivity(intent);
     }
+
     //switch to the Achievements activity
-    public void switchAchievements (View view){
+    public void switchAchievements(View view) {
         Intent intent = new Intent(this, Achievements.class);
 
         startActivity(intent);
     }
+
+    //getters and setters
+
     //quit the app
-    public void exit (View view){
+    public void exit(View view) {
         finish();
     }
+
     //switch to the Help Main activity
-    public void switchHelp (View view){
+    public void switchHelp(View view) {
         Intent intent = new Intent(this, HelpMain.class);
 
         startActivity(intent);
