@@ -22,7 +22,6 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -40,11 +39,6 @@ public class ViewWordsTest {
 
     @Test
     public void viewWordsTest() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         ViewInteraction button = onView(
                 allOf(ViewMatchers.withId(R.id.button2), withText("Play"),
                         childAtPosition(
@@ -56,12 +50,12 @@ public class ViewWordsTest {
         button.perform(click());
 
         ViewInteraction button2 = onView(
-                allOf(withId(R.id.button45), withText("medium"),
+                allOf(withId(R.id.button43), withText("easiest"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.support.constraint.ConstraintLayout")),
                                         3),
-                                3),
+                                1),
                         isDisplayed()));
         button2.perform(click());
 
@@ -90,16 +84,7 @@ public class ViewWordsTest {
                                 1)));
         recyclerView.perform(actionOnItemAtPosition(3, click()));
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.textView),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView.check(matches(isDisplayed()));
-
+        allOf(withText("Collected words:"),isDisplayed());
     }
 
     private static Matcher<View> childAtPosition(

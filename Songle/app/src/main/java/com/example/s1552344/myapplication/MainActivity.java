@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
             XmlPullParser xpp = factory.newPullParser();
 
             getSongList().clear();
-            xpp.setInput(new StringReader(SongList)); // pass input whatever xml you have
+            xpp.setInput(new StringReader(SongList));
             int eventType = xpp.getEventType();
             String currentTag = "";
             int songCounter = -1;
@@ -84,7 +84,7 @@ public class MainActivity extends Activity {
                     Log.d(TAG, "End tag " + xpp.getName());
                     currentTag = "";
                 } else if (eventType == XmlPullParser.TEXT) {
-                    Log.d(TAG, "Text " + xpp.getText()); // here you get the text from xml
+                    Log.d(TAG, "Text " + xpp.getText());
                     if (currentTag.equals("Number")) {
                         //Log.d(TAG, "Number " + xpp.getText());
                         getSongList().get(songCounter).setNumber(xpp.getText());

@@ -1,12 +1,16 @@
 ### To-do list
 
 
-- [ ] Improve song guess recognition and string matching
-- [ ] Implement designed UI
-- [ ] Comment code
-- [ ] Implement unit testing
-- [ ] Write implementation documentation
-- [ ] Refactor code
-- [ ] Stabilize download on bad connection
-- [ ] Implement dialogs for user confirmation when pressing back button
-- [ ] Add resume game function (optional)
+- [ ] Improve song guess recognition and string matching (optional)
+- [x] Implement designed UI
+- [x] Comment code
+- [x] Implement unit testing
+- [x] Write implementation documentation
+- [x] Refactor code
+- [x] Stabilize download on bad connection
+- [x] Implement dialogs for user confirmation when pressing back button
+- [x] Write help documentation
+- [x] Setup placemark collection distance
+- [x] Pan map to player on launch
+- [x] Fix displayed words
+- [x] Implement camera tracking (optional)
