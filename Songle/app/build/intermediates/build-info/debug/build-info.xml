@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <instant-run
-    abi="x86"
-    api-level="26"
+    abi="arm64-v8a,armeabi-v7a,armeabi"
+    api-level="25"
     build-mode="FULL"
     density="420dpi"
     format="10"
     plugin-version="3.0.0-rc2"
-    timestamp="1512753553782"
+    timestamp="1512913644450"
     token="-7166432701387686734"
     verifier="FULL_BUILD_REQUESTED" >
 
     <task
         name="javac"
-        duration="751" />
+        duration="0" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="1040" />
+        duration="769" />
     <task
         name="verifier"
-        duration="92" />
+        duration="0" />
 
     <artifact
         location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/dep/dependencies.apk"
-        type="SPLIT" />
-    <artifact
-        location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_3.apk"
         type="SPLIT" />
     <artifact
         location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_2.apk"
@@ -39,13 +36,19 @@
         location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_0.apk"
         type="SPLIT" />
     <artifact
+        location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_3.apk"
+        type="SPLIT" />
+    <artifact
+        location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
+        type="SPLIT" />
+    <artifact
         location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_5.apk"
         type="SPLIT" />
     <artifact
         location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_6.apk"
         type="SPLIT" />
     <artifact
-        location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
+        location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_9.apk"
         type="SPLIT" />
     <artifact
         location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_4.apk"
@@ -54,21 +57,15 @@
         location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_8.apk"
         type="SPLIT" />
     <artifact
-        location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_9.apk"
-        type="SPLIT" />
-    <artifact
         location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/outputs/apk/debug/app-debug.apk"
         type="SPLIT_MAIN" />
 
     <build
         build-mode="FULL"
-        timestamp="1512753553782"
+        timestamp="1512913644450"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/dep/dependencies.apk"
-            type="SPLIT" />
-        <artifact
-            location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_3.apk"
             type="SPLIT" />
         <artifact
             location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_2.apk"
@@ -80,22 +77,25 @@
             location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_0.apk"
             type="SPLIT" />
         <artifact
+            location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_3.apk"
+            type="SPLIT" />
+        <artifact
+            location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
+            type="SPLIT" />
+        <artifact
             location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_5.apk"
             type="SPLIT" />
         <artifact
             location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_6.apk"
             type="SPLIT" />
         <artifact
-            location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
+            location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_9.apk"
             type="SPLIT" />
         <artifact
             location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_4.apk"
             type="SPLIT" />
         <artifact
             location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_8.apk"
-            type="SPLIT" />
-        <artifact
-            location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/intermediates/split-apk/debug/slices/slice_9.apk"
             type="SPLIT" />
         <artifact
             location="/afs/inf.ed.ac.uk/user/s15/s1552344/StudioProjects/Songle/app/build/outputs/apk/debug/app-debug.apk"
